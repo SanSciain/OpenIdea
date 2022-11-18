@@ -1,7 +1,15 @@
 <template>
-    <router-view></router-view>
+    <div>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script></script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+div {
+    // Test
+    width: 100%;
+    height: 100%;
+}
+</style>

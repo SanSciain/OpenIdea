@@ -2139,7 +2139,13 @@ __webpack_require__.r(__webpack_exports__);
           name: "Dashboard"
         });
       });
+      // .catch((error) => {
+      //     if (error.response.status === 422) {
+      //         errors.value = error.response.data.errors;
+      //     }
+      // });
     }
+
     var __returned__ = {
       router: router,
       user: user,
@@ -43611,19 +43617,18 @@ axiosClient.interceptors.request.use(function (config) {
 });
 axiosClient.interceptors.response.use(function (response) {
   return response;
-}, function (error) {
-  if (error.response.status === 401) {
-    sessionStorage.removeItem("TOKEN");
-    _router_index_js__WEBPACK_IMPORTED_MODULE_2__["default"].push({
-      name: "Login"
-    });
-  } else if (error.response.status === 404) {
-    _router_index_js__WEBPACK_IMPORTED_MODULE_2__["default"].push({
-      name: "NotFound"
-    });
-  }
-  return error;
-});
+}
+// (error) => {
+//     if (error.response.status === 401) {
+//         sessionStorage.removeItem("TOKEN");
+//         router.push({ name: "Login" });
+//     } else if (error.response.status === 404) {
+//         router.push({ name: "NotFound" });
+//     }
+//     return error;
+// }
+);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (axiosClient);
 
 /***/ }),

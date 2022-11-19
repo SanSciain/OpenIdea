@@ -21,7 +21,6 @@ class AuthController extends Controller
             ]
         ]);
 
-        /** @var \App\Models\User $user */
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],

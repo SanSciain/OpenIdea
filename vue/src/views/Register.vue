@@ -1,6 +1,13 @@
 <template>
     <div class="container w-50 p-4">
         <h1>Register</h1>
+        <div class="container">
+            <ul>
+                <li v-for="error in errors">
+                    <p class="text-danger">{{ error[0] }}</p>
+                </li>
+            </ul>
+        </div>
         <form @submit="register">
             <div class="mb-3 row">
                 <div class="col-sm-10">
@@ -55,8 +62,12 @@
 </template>
 
 <script setup>
-import store from "../store/index";
+import store from "../store/index.js";
 import { useRouter } from "vue-router";
+
+import { ref } from "vue";
+const errors = ref({});
+
 const router = useRouter();
 const user = {
     name: "",
@@ -66,16 +77,18 @@ const user = {
 };
 function register(ev) {
     ev.preventDefault();
-    store.dispatch("register", user).then(() => {
-        router.push({
-            name: "Dashboard",
+    store
+        .dispatch("register", user)
+        .then((resp) => {
+            router.push({
+                name: "Dashboard",
+            });
+        })
+        .catch((error) => {
+            if (error.response.status === 422) {
+                errors.value = error.response.data.errors;
+            }
         });
-    });
-    // .catch((error) => {
-    //     if (error.response.status === 422) {
-    //         errors.value = error.response.data.errors;
-    //     }
-    // });
 }
 </script>
 

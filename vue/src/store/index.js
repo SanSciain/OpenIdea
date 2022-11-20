@@ -1,6 +1,8 @@
 import { createStore } from "vuex";
 import axiosClient from "../axios.js";
 
+import createPersistedState from "vuex-persistedstate";
+
 const store = createStore({
     state: {
         user: {
@@ -11,19 +13,46 @@ const store = createStore({
     getters: {},
     actions: {
         register({ commit }, user) {
-            return axiosClient.post("/register", user).then(({ data }) => {
-                commit("setUser", data.user);
-                commit("setToken", data.token);
-                return data;
+            return axiosClient.post("/register", user).then((resp) => {
+                if (resp.data) {
+                    commit("setUser", resp.data.user);
+                    commit("setToken", resp.data.token);
+                    return resp.data;
+                }
+                throw resp;
             });
         },
         login({ commit }, user) {
-            return axiosClient.post("/login", user).then(({ data }) => {
-                commit("setUser", data.user);
-                commit("setToken", data.token);
-                return data;
-            });
+            return axiosClient
+                .post("/login", user)
+                .then((resp) => {
+                    if (resp.data) {
+                        commit("setUser", resp.data.user);
+                        commit("setToken", resp.data.token);
+                        return resp.data;
+                    }
+                    throw resp;
+                })
+                .catch((err) => {
+                    throw err;
+                });
         },
+
+        // register({ commit }, user) {
+        //     return axiosClient.post("/register", user).then(({ data }) => {
+        //         commit("setUser", data.user);
+        //         commit("setToken", data.token);
+        //         return data;
+        //     });
+        // },
+        // login({ commit }, user) {
+        //     return axiosClient.post("/login", user).then(({ data }) => {
+        //         commit("setUser", data.user);
+        //         commit("setToken", data.token);
+        //         return data;
+        //     });
+        // },
+
         logout({ commit }) {
             return axiosClient.post("/logout").then((response) => {
                 commit("logout");
@@ -32,7 +61,6 @@ const store = createStore({
         },
         getUser({ commit }) {
             return axiosClient.get("/user").then((res) => {
-                console.log(res);
                 commit("setUser", res.data);
             });
         },
@@ -53,6 +81,7 @@ const store = createStore({
         },
     },
     modules: {},
+    plugins: [createPersistedState()],
 });
 
 export default store;

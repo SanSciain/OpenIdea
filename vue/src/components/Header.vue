@@ -18,7 +18,7 @@
                     class="collapse navbar-collapse"
                     id="navbarSupportedContent"
                 >
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a
                                 class="nav-link active"
@@ -64,36 +64,49 @@
                         <li class="nav-item">
                             <a class="nav-link disabled">Disabled</a>
                         </li>
+                        <li class="nav-item">
+                            <div class="position-relative">
+                                <div
+                                    class="rounded-circle ms-user-info bg-primary mx-3 d-flex justify-content-center align-items-center user-select-none"
+                                    @click="
+                                        settingsDropdownFlag =
+                                            !settingsDropdownFlag
+                                    "
+                                >
+                                    {{ $store.state.user.data.name }}
+                                </div>
+                                <div v-if="settingsDropdownFlag">
+                                    <ul
+                                        class="dropdown-menu d-block position-absolute end-0"
+                                        v-if="$store.state.user.token"
+                                    >
+                                        <li class="p-2">
+                                            <a href="" @click="logout"
+                                                >Logout</a
+                                            >
+                                        </li>
+                                        <li class="p-2">
+                                            <router-link to="Dashboard"
+                                                >Dashboard</router-link
+                                            >
+                                        </li>
+                                    </ul>
+                                    <ul v-else>
+                                        <li class="p-2">
+                                            <router-link to="Login"
+                                                >Login</router-link
+                                            >
+                                        </li>
+                                        <li class="p-2">
+                                            <router-link to="Register"
+                                                >Register</router-link
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
-                    <form class="d-flex">
-                        <input
-                            class="form-control me-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button class="btn btn-outline-success" type="submit">
-                            Search
-                        </button>
-                    </form>
-                    <div class="position-relative">
-                        <div
-                            class="rounded-circle ms-user-info bg-primary mx-3 d-flex justify-content-center align-items-center user-select-none"
-                            @click="
-                                settingsDropdownFlag = !settingsDropdownFlag
-                            "
-                        >
-                            {{ $store.state.user.data.name }}
-                        </div>
-                        <ul
-                            class="dropdown-menu d-block position-absolute end-0"
-                            v-if="settingsDropdownFlag"
-                        >
-                            <li class="p-2">
-                                <a href="" @click="logout">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -126,6 +139,7 @@ export default {
 
 <style lang="scss" scoped>
 .ms-user-info {
+    overflow: hidden;
     width: 50px;
     height: 50px;
     cursor: pointer;

@@ -65,9 +65,8 @@ function login(ev) {
     store
         .dispatch("login", user)
         .then(() => {
-            console.log("giusto");
             router.push({
-                name: "Dashboard",
+                name: "IdeaIndex",
             });
         })
         .catch((err) => {

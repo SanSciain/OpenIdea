@@ -64,6 +64,30 @@ const store = createStore({
                 commit("setUser", res.data);
             });
         },
+        getIdeas() {
+            return axiosClient.get("/ideaindex").then((resp) => {
+                return resp;
+            });
+        },
+        getIdeasOwned() {
+            return axiosClient.get("/ideaownedindex").then((resp) => {
+                return resp;
+            });
+        },
+        getIdeaCreate() {
+            return axiosClient.get("/ideacreate").then((resp) => {
+                return resp;
+            });
+        },
+        getMatchingTags({}, tagSrc) {
+            return axiosClient
+                .get("/tagindex", {
+                    params: { tagSearched: tagSrc.tagSearched },
+                })
+                .then((resp) => {
+                    return resp;
+                });
+        },
     },
     mutations: {
         logout: (state) => {

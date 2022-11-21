@@ -81,7 +81,7 @@ function register(ev) {
         .dispatch("register", user)
         .then((resp) => {
             router.push({
-                name: "Dashboard",
+                name: "IdeaIndex",
             });
         })
         .catch((error) => {

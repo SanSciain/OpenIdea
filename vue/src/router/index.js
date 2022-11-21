@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Dashboard from "../views/Dashboard.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Dashboard from "../views/Dashboard.vue";
 import AuthLayout from "../layouts/AuthLayout.vue";
 import MainLayout from "../layouts/MainLayout.vue";
+import GuestLayout from "../layouts/GuestLayout.vue";
+import IdeaIndex from "../views/ideas/Index.vue";
+import IdeaOwnedIndex from "../views/ideas/OwnedIndex.vue";
+import IdeaCreate from "../views/ideas/Create.vue";
 import store from "../store/index.js";
 
 const routes = [
@@ -15,9 +19,32 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             {
-                path: "/",
+                path: "/dashboard",
                 name: "Dashboard",
                 component: Dashboard,
+                children: [],
+            },
+            {
+                path: "/ideaindexowned",
+                name: "IdeaOwnedIndex",
+                component: IdeaOwnedIndex,
+            },
+            {
+                path: "/ideacreate",
+                name: "IdeaCreate",
+                component: IdeaCreate,
+            },
+        ],
+    },
+    {
+        path: "/guest",
+        name: "GuestLayout",
+        component: GuestLayout,
+        children: [
+            {
+                path: "/ideaindex",
+                name: "IdeaIndex",
+                component: IdeaIndex,
             },
         ],
     },
@@ -51,7 +78,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !store.state.user.token) {
         next({ name: "Login" });
     } else if (store.state.user.token && to.meta.isGuest) {
-        next({ name: "Dashboard" });
+        next({ name: "IdeaIndex" });
     } else {
         next();
     }

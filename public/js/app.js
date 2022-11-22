@@ -2324,6 +2324,7 @@ __webpack_require__.r(__webpack_exports__);
       tagsSelected: [],
       // requesto.tags: [],
       selectedFlag: false,
+      tagAlreadyAddedFlag: false,
       tagSelectedId: null,
       requesto: {
         title: "",
@@ -2341,6 +2342,7 @@ __webpack_require__.r(__webpack_exports__);
     tagSearch: function tagSearch() {
       var _this = this;
       this.selectedFlag = false;
+      this.tagAlreadyAddedFlag = false;
       if (this.tagSearched.length) {
         _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getMatchingTags", {
           tagSearched: this.tagSearched
@@ -2373,15 +2375,22 @@ __webpack_require__.r(__webpack_exports__);
       this.tagSelectedId = this.tagSelected.id;
     },
     addTag: function addTag() {
-      if (this.selectedFlag) {
+      if (this.selectedFlag && !this.requesto.tags.includes(this.tagSelectedId)) {
         this.tagsSelected.push(this.tagSelected);
         this.requesto.tags.push(this.tagSelectedId);
         this.tagSearched = "";
+      } else if (this.requesto.tags.includes(this.tagSelectedId)) {
+        this.tagAlreadyAddedFlag = true;
       }
+    },
+    removeTag: function removeTag(tag) {
+      var positionN = this.tagsSelected.indexOf(tag.name);
+      this.tagsSelected.splice(positionN, 1);
+      var positionI = this.tagsSelected.indexOf(tag.id);
+      this.requesto.tags.splice(positionI, 1);
     },
     // Add removing tag
     // Add controll if tag is already added
-    //it don't save tags
     postIdeaStore: function postIdeaStore(ev) {
       ev.preventDefault();
       var req = _.cloneDeep(this.requesto);
@@ -3036,41 +3045,37 @@ var _hoisted_7 = {
 var _hoisted_8 = {
   "class": "badge rounded-pill bg-success py-2 ps-4 pe-3 d-flex align-items-center ms-badge"
 };
-var _hoisted_9 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "button",
-    "class": "btn-close btn-close-white ms-2",
-    "aria-label": "Close"
-  }, null, -1 /* HOISTED */);
-});
-var _hoisted_10 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    id: "tagAlreadyAdded",
-    "class": "d-none"
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-    "class": "text-center text-danger"
-  }, "Tag already added")], -1 /* HOISTED */);
-});
+var _hoisted_9 = ["onClick"];
+var _hoisted_10 = {
+  key: 0,
+  id: "tagAlreadyAdded"
+};
 var _hoisted_11 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+    "class": "text-center text-danger"
+  }, "Tag already added", -1 /* HOISTED */);
+});
+var _hoisted_12 = [_hoisted_11];
+var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "tagSearchbar",
     "class": "form-label fw-bold"
   }, "Tags* :", -1 /* HOISTED */);
 });
-var _hoisted_12 = {
-  key: 0,
+var _hoisted_14 = {
+  key: 1,
   id: "containerSearchedTag"
 };
-var _hoisted_13 = {
+var _hoisted_15 = {
   key: 0,
   value: "",
   selected: "",
   disabled: ""
 };
-var _hoisted_14 = ["value"];
-var _hoisted_15 = ["disabled"];
-var _hoisted_16 = ["disabled"];
-var _hoisted_17 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_16 = ["value"];
+var _hoisted_17 = ["disabled"];
+var _hoisted_18 = ["disabled"];
+var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
     "class": "text-center"
   }, "* These fields are required", -1 /* HOISTED */);
@@ -3104,8 +3109,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.checkField && $options.checkField.apply($options, arguments);
     })
   }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.requesto.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsSelected, function (el) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), _hoisted_9]);
-  }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div id=\"tagsSlectedInput\" class=\"d-none\">\r\n                        <input\r\n                            v-for=\"id in requesto.tags\"\r\n                            class=\"form-check-input\"\r\n                            type=\"checkbox\"\r\n                            checked\r\n                            :value=\"id\"\r\n                            id=\"tags[]\"\r\n                        />\r\n                    </div> "), _hoisted_10, _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "btn-close btn-close-white ms-2",
+      "aria-label": "Close",
+      onClick: function onClick($event) {
+        return $options.removeTag(el);
+      }
+    }, null, 8 /* PROPS */, _hoisted_9)]);
+  }), 256 /* UNKEYED_FRAGMENT */))]), $data.tagAlreadyAddedFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control",
     name: "tagSearchbar",
@@ -3116,7 +3128,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onKeyup: _cache[5] || (_cache[5] = function () {
       return $options.tagSearch && $options.tagSearch.apply($options, arguments);
     })
-  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.tagSearched]]), $data.tagSearched.length > 0 && $data.tagSearched !== $data.tagSelected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.tagSearched]]), $data.tagSearched.length > 0 && $data.tagSearched !== $data.tagSelected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     name: "tagList",
     id: "tagList",
     "class": "form-select w-100",
@@ -3124,10 +3136,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $data.tagSelected = $event;
     }),
-    onChange: _cache[7] || (_cache[7] = function () {
+    onClick: _cache[7] || (_cache[7] = function () {
       return $options.selectMatchingTag && $options.selectMatchingTag.apply($options, arguments);
     })
-  }, [!$data.tagsMatching.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", _hoisted_13, " No tag found ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  }, [!$data.tagsMatching.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", _hoisted_15, " No tag found ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 1
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsMatching, function (tag) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
@@ -3135,8 +3147,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: tag.id,
         name: tag.name
       }
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tag.name), 9 /* TEXT, PROPS */, _hoisted_14);
-  }), 256 /* UNKEYED_FRAGMENT */))], 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.tagSelected]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tag.name), 9 /* TEXT, PROPS */, _hoisted_16);
+  }), 256 /* UNKEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.tagSelected]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     id: "add-tag-btn",
     "class": "btn btn-success",
@@ -3144,12 +3156,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[8] || (_cache[8] = function () {
       return $options.addTag && $options.addTag.apply($options, arguments);
     })
-  }, " Add + ", 8 /* PROPS */, _hoisted_15)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Add + ", 8 /* PROPS */, _hoisted_17)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn btn-primary",
     disabled: $data.submitDisable,
     id: "submitButton"
-  }, " Submit ", 8 /* PROPS */, _hoisted_16)], 32 /* HYDRATE_EVENTS */), _hoisted_17])]);
+  }, " Submit ", 8 /* PROPS */, _hoisted_18)], 32 /* HYDRATE_EVENTS */), _hoisted_19])]);
 }
 
 /***/ }),

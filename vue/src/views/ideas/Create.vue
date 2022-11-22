@@ -38,20 +38,12 @@
                                 type="button"
                                 class="btn-close btn-close-white ms-2"
                                 aria-label="Close"
+                                @click="removeTag(el)"
                             ></button
                         ></span>
                     </div>
-                    <!-- <div id="tagsSlectedInput" class="d-none">
-                        <input
-                            v-for="id in requesto.tags"
-                            class="form-check-input"
-                            type="checkbox"
-                            checked
-                            :value="id"
-                            id="tags[]"
-                        />
-                    </div> -->
-                    <div id="tagAlreadyAdded" class="d-none">
+
+                    <div id="tagAlreadyAdded" v-if="tagAlreadyAddedFlag">
                         <p class="text-center text-danger">Tag already added</p>
                     </div>
                     <label for="tagSearchbar" class="form-label fw-bold"
@@ -78,7 +70,7 @@
                             class="form-select w-100"
                             size="3"
                             v-model="tagSelected"
-                            @change="selectMatchingTag"
+                            @click="selectMatchingTag"
                         >
                             <option
                                 value=""
@@ -140,6 +132,7 @@ export default {
             tagsSelected: [],
             // requesto.tags: [],
             selectedFlag: false,
+            tagAlreadyAddedFlag: false,
             tagSelectedId: null,
             requesto: {
                 title: "",
@@ -157,6 +150,7 @@ export default {
 
         tagSearch() {
             this.selectedFlag = false;
+            this.tagAlreadyAddedFlag = false;
             if (this.tagSearched.length) {
                 store
                     .dispatch("getMatchingTags", {
@@ -194,18 +188,29 @@ export default {
         },
 
         addTag() {
-            if (this.selectedFlag) {
+            if (
+                this.selectedFlag &&
+                !this.requesto.tags.includes(this.tagSelectedId)
+            ) {
                 this.tagsSelected.push(this.tagSelected);
                 this.requesto.tags.push(this.tagSelectedId);
                 this.tagSearched = "";
+            } else if (this.requesto.tags.includes(this.tagSelectedId)) {
+                this.tagAlreadyAddedFlag = true;
             }
+        },
+
+        removeTag(tag) {
+            let positionN = this.tagsSelected.indexOf(tag.name);
+            this.tagsSelected.splice(positionN, 1);
+            let positionI = this.tagsSelected.indexOf(tag.id);
+            this.requesto.tags.splice(positionI, 1);
         },
 
         // Add removing tag
 
         // Add controll if tag is already added
 
-        //it don't save tags
         postIdeaStore(ev) {
             ev.preventDefault();
             const req = _.cloneDeep(this.requesto);

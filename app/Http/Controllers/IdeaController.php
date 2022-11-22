@@ -39,27 +39,30 @@ class IdeaController extends Controller
         return response([$tags]);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $user = Auth::user();
-    //     $request->validate($this->getValidationRules());
-    //     $data = $request->all();
-    //     $idea = new Idea;
-    //     $idea->fill($data);
-    //     $idea->slug = Idea::generateIdeaSlugFromTitle($idea->title);
-    //     $idea->user_id = $user->id;
-    //     $idea->save();
-    //     if (isset($data['tags'])) {
-    //         $idea->tags()->sync($data['tags']);
-    //     }
-    //     return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
-    // }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        $idea = new Idea;
+        $request->validate($this->getValidationRules());
+        $data = $request->all();
+        $idea->fill($data);
+        $idea->slug = Idea::generateIdeaSlugFromTitle($idea->title);
+        $idea->user_id = $user->id;
+        $idea->save();
+
+
+        if (isset($data['tags'])) {
+            $idea->tags()->sync($data['tags']);
+        };
+
+        // // return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
+    }
 
     // /**
     //  * Display the specified resource.

@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/ideaownedindex', [IdeaController::class, 'indexOwned']);
     Route::get('/ideacreate', [IdeaController::class, 'create']);
-
+    Route::post('/ideastore', [IdeaController::class, 'store']);
     Route::get('/tagindex', [TagController::class, 'index']);
 });
 

@@ -9,7 +9,7 @@ class Tag extends Model
 {
     public function ideas()
     {
-        return $this->belongsToMany('App\Idea');
+        return $this->belongsToMany('App\Models\Idea');
     }
 
     protected $fillable = ['name'];

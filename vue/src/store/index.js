@@ -88,6 +88,9 @@ const store = createStore({
                     return resp;
                 });
         },
+        postIdeaStore({}, req) {
+            return axiosClient.post("/ideastore", req);
+        },
     },
     mutations: {
         logout: (state) => {

@@ -8,24 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Idea extends Model
 {
+
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Models\Tag');
     }
 
     public function roles()
     {
-        return $this->hasMany('App\Role');
+        return $this->belongsToMany('App\Models\Role');
     }
 
     public function messages()
     {
-        return $this->hasMany('App\Message');
+        return $this->hasMany('App\Models\Message');
     }
 
     protected $fillable = [

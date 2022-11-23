@@ -7,6 +7,11 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class IdeaController extends Controller
 {
     /**
@@ -71,22 +76,28 @@ class IdeaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $idea = Idea::findOrFail($id);
-        return $idea;
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
     }
 
-    public function showOwned($id)
+    public function showOwned($slug)
     {
-        $user = Auth::user();
-        $idea = Idea::findOrFail($id);
-        if ($idea->user->id === $user->id) {
-            return $idea;
-        } else {
-            return "you don't own that idea";
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+            $user = Auth::user();
+            if ($idea->user_id === $user->id) {
+                return $idea;
+            } else if ($idea) {
+                return null;
+            }
+        } catch (ModelNotFoundException $e) {
+            throw $e;
         }
-        // $idea = Idea::findOrFail($id)->where('user_id', $user->id)->first();
     }
 
     // /**

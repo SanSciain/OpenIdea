@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!nullFlag">
+        <div v-if="!noFoundFlag">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ idea.title }}</h5>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div v-else>
-            <h3 class="text-center text-danger">This idea no longer exist</h3>
+            <h3 class="text-center text-danger">Idea not found</h3>
         </div>
     </div>
 </template>
@@ -30,22 +30,28 @@ export default {
                 slug: "",
                 text: "",
             },
-            nullFlag: false,
+            noFoundFlag: false,
         };
     },
     created() {
         this.getIdeaShow();
     },
     methods: {
+        // we have to pass the id of the idea we wanna show
+
         getIdeaShow() {
-            store.dispatch("getIdeaShow").then((resp) => {
-                if (resp.isNull) {
-                    this.nullFlag = true;
-                } else {
-                    this.idea = resp.data;
-                    return resp;
-                }
-            });
+            this.noFoundFlag = false;
+            const slug = this.$route.params.slug;
+            store
+                .dispatch("getIdeaShow", slug)
+                .then((resp) => {
+                    if (resp.data) {
+                        this.idea = resp.data;
+                    }
+                })
+                .catch((er) => {
+                    this.noFoundFlag = true;
+                });
         },
     },
 };

@@ -9,7 +9,6 @@ const store = createStore({
             data: {},
             token: sessionStorage.getItem("TOKEN"),
         },
-        ideaToShowId: null,
     },
     getters: {},
     actions: {
@@ -91,29 +90,18 @@ const store = createStore({
         },
         postIdeaStore({ commit }, req) {
             return axiosClient.post("/ideastore", req).then((resp) => {
-                commit("setIdeaToShowId", resp.data.id);
                 return resp;
             });
         },
-        getIdeaShow() {
-            return axiosClient
-                .get(`/ideashow/${this.state.ideaToShowId}`)
-                .then((resp) => {
-                    return resp;
-                });
+        getIdeaShow({}, req) {
+            return axiosClient.get(`ideashow/${req}`).then((resp) => {
+                return resp;
+            });
         },
-        getIdeaShowOwned() {
-            if (!this.state.ideaToShowId) {
-                return {
-                    isNull: true,
-                };
-            } else {
-                return axiosClient
-                    .get(`ideaownedshow/${this.state.ideaToShowId}`)
-                    .then((resp) => {
-                        return resp;
-                    });
-            }
+        getIdeaShowOwned({}, req) {
+            return axiosClient.get(`ideaownedshow/${req}`).then((resp) => {
+                return resp;
+            });
         },
     },
     mutations: {
@@ -129,9 +117,6 @@ const store = createStore({
         setToken: (state, token) => {
             state.user.token = token;
             sessionStorage.setItem("TOKEN", token);
-        },
-        setIdeaToShowId: (state, id) => {
-            state.ideaToShowId = id;
         },
     },
     modules: {},

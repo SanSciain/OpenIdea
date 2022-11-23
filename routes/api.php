@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ideaownedindex', [IdeaController::class, 'indexOwned']);
     // Route::get('/ideacreate', [IdeaController::class, 'create']);
     Route::post('/ideastore', [IdeaController::class, 'store']);
-    Route::get('/ideaownedshow/{id}', [IdeaController::class, 'showOwned']);
+    Route::get('/ideaownedshow/{slug}', [IdeaController::class, 'showOwned']);
     Route::get('/tagindex', [TagController::class, 'index']);
 });
 
@@ -34,4 +34,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/ideaindex', [IdeaController::class, 'index']);
-Route::get('/ideashow/{id}', [IdeaController::class, 'show']);
+Route::get('/ideashow/{slug}', [IdeaController::class, 'show']);

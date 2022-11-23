@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!nullFlag">
+        <div v-if="!notOwnedFlag && !noFoundFlag">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ idea.title }}</h5>
@@ -13,8 +13,11 @@
                 </div>
             </div>
         </div>
+        <div v-else-if="notOwnedFlag && !noFoundFlag">
+            <h3 class="text-center text-danger">You don't own this idea</h3>
+        </div>
         <div v-else>
-            <h3 class="text-center text-danger">This idea no longer exist</h3>
+            <h3 class="text-center text-danger">Idea not found</h3>
         </div>
     </div>
 </template>
@@ -30,7 +33,8 @@ export default {
                 slug: "",
                 text: "",
             },
-            nullFlag: false,
+            notOwnedFlag: false,
+            noFoundFlag: false,
         };
     },
     created() {
@@ -40,15 +44,21 @@ export default {
         // we have to pass the id of the idea we wanna show
 
         getIdeaShowOwned() {
-            this.nullFlag = false;
-            store.dispatch("getIdeaShowOwned").then((resp) => {
-                if (resp.isNull) {
-                    this.nullFlag = true;
-                } else {
-                    this.idea = resp.data;
-                    return resp;
-                }
-            });
+            this.notOwnedFlag = false;
+            this.noFoundFlag = false;
+            const slug = this.$route.params.slug;
+            store
+                .dispatch("getIdeaShowOwned", slug)
+                .then((resp) => {
+                    if (resp.data) {
+                        this.idea = resp.data;
+                    } else {
+                        this.notOwnedFlag = true;
+                    }
+                })
+                .catch((er) => {
+                    this.noFoundFlag = true;
+                });
         },
     },
 };

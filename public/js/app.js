@@ -2393,7 +2393,6 @@ __webpack_require__.r(__webpack_exports__);
       ev.preventDefault();
       var req = _.cloneDeep(this.requesto);
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("postIdeaStore", req).then(function (res) {
-        _store__WEBPACK_IMPORTED_MODULE_0__["default"].commit("setIdeaToShowId", res.data.id);
         _router__WEBPACK_IMPORTED_MODULE_1__["default"].push({
           name: "IdeaOwnedShow",
           params: {
@@ -2511,7 +2510,8 @@ __webpack_require__.r(__webpack_exports__);
         slug: "",
         text: ""
       },
-      nullFlag: false
+      notOwnedFlag: false,
+      noFoundFlag: false
     };
   },
   created: function created() {
@@ -2521,14 +2521,17 @@ __webpack_require__.r(__webpack_exports__);
     // we have to pass the id of the idea we wanna show
     getIdeaShowOwned: function getIdeaShowOwned() {
       var _this = this;
-      this.nullFlag = false;
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShowOwned").then(function (resp) {
-        if (resp.isNull) {
-          _this.nullFlag = true;
-        } else {
+      this.notOwnedFlag = false;
+      this.noFoundFlag = false;
+      var slug = this.$route.params.slug;
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShowOwned", slug).then(function (resp) {
+        if (resp.data) {
           _this.idea = resp.data;
-          return resp;
+        } else {
+          _this.notOwnedFlag = true;
         }
+      })["catch"](function (er) {
+        _this.noFoundFlag = true;
       });
     }
   }
@@ -2558,22 +2561,24 @@ __webpack_require__.r(__webpack_exports__);
         slug: "",
         text: ""
       },
-      nullFlag: false
+      noFoundFlag: false
     };
   },
   created: function created() {
     this.getIdeaShow();
   },
   methods: {
+    // we have to pass the id of the idea we wanna show
     getIdeaShow: function getIdeaShow() {
       var _this = this;
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShow").then(function (resp) {
-        if (resp.isNull) {
-          _this.nullFlag = true;
-        } else {
+      this.noFoundFlag = false;
+      var slug = this.$route.params.slug;
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShow", slug).then(function (resp) {
+        if (resp.data) {
           _this.idea = resp.data;
-          return resp;
         }
+      })["catch"](function (er) {
+        _this.noFoundFlag = true;
       });
     }
   }
@@ -3402,10 +3407,17 @@ var _hoisted_7 = {
 };
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-center text-danger"
-}, "This idea no longer exist", -1 /* HOISTED */);
+}, "You don't own this idea", -1 /* HOISTED */);
 var _hoisted_9 = [_hoisted_8];
+var _hoisted_10 = {
+  key: 2
+};
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+  "class": "text-center text-danger"
+}, "Idea not found", -1 /* HOISTED */);
+var _hoisted_12 = [_hoisted_11];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.nullFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _hoisted_9))]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _hoisted_9)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, _hoisted_12))]);
 }
 
 /***/ }),
@@ -3446,10 +3458,10 @@ var _hoisted_7 = {
 };
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-center text-danger"
-}, "This idea no longer exist", -1 /* HOISTED */);
+}, "Idea not found", -1 /* HOISTED */);
 var _hoisted_9 = [_hoisted_8];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.nullFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _hoisted_9))]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _hoisted_9))]);
 }
 
 /***/ }),
@@ -45603,8 +45615,7 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
     user: {
       data: {},
       token: sessionStorage.getItem("TOKEN")
-    },
-    ideaToShowId: null
+    }
   },
   getters: {},
   actions: {
@@ -45687,25 +45698,20 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
     postIdeaStore: function postIdeaStore(_ref6, req) {
       var commit = _ref6.commit;
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post("/ideastore", req).then(function (resp) {
-        commit("setIdeaToShowId", resp.data.id);
         return resp;
       });
     },
-    getIdeaShow: function getIdeaShow() {
-      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/ideashow/".concat(this.state.ideaToShowId)).then(function (resp) {
+    getIdeaShow: function getIdeaShow(_ref7, req) {
+      _objectDestructuringEmpty(_ref7);
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("ideashow/".concat(req)).then(function (resp) {
         return resp;
       });
     },
-    getIdeaShowOwned: function getIdeaShowOwned() {
-      if (!this.state.ideaToShowId) {
-        return {
-          isNull: true
-        };
-      } else {
-        return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("ideaownedshow/".concat(this.state.ideaToShowId)).then(function (resp) {
-          return resp;
-        });
-      }
+    getIdeaShowOwned: function getIdeaShowOwned(_ref8, req) {
+      _objectDestructuringEmpty(_ref8);
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("ideaownedshow/".concat(req)).then(function (resp) {
+        return resp;
+      });
     }
   },
   mutations: {
@@ -45720,9 +45726,6 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
     setToken: function setToken(state, token) {
       state.user.token = token;
       sessionStorage.setItem("TOKEN", token);
-    },
-    setIdeaToShowId: function setIdeaToShowId(state, id) {
-      state.ideaToShowId = id;
     }
   },
   modules: {},

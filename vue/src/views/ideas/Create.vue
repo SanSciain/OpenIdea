@@ -211,7 +211,6 @@ export default {
             ev.preventDefault();
             const req = _.cloneDeep(this.requesto);
             store.dispatch("postIdeaStore", req).then((res) => {
-                store.commit("setIdeaToShowId", res.data.id);
                 router.push({
                     name: "IdeaOwnedShow",
                     params: {

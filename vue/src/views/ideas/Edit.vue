@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="container" v-if="!notOwnedFlag && !noFoundFlag">
             <form @submit="postIdeaStore">
                 <div class="mb-3">
                     <label for="title" class="form-label fw-bold"
@@ -114,6 +114,12 @@
 
             <p class="text-center">* These fields are required</p>
         </div>
+        <div v-else-if="notOwnedFlag && !noFoundFlag">
+            <h3 class="text-center text-danger">You don't own this idea</h3>
+        </div>
+        <div v-else>
+            <h3 class="text-center text-danger">Idea not found</h3>
+        </div>
     </div>
 </template>
 
@@ -121,26 +127,31 @@
 import store from "../../store";
 import router from "../../router";
 export default {
-    name: "Create",
+    name: "Edit",
     data() {
         return {
             // title: "",
             // text: "",
             tagSearched: "",
             tagSelected: "",
-            submitDisable: true,
+            submitDisable: false,
             tagsMatching: [],
             tagsSelected: [],
             // requesto.tags: [],
             selectedFlag: false,
             tagAlreadyAddedFlag: false,
             tagSelectedId: null,
+            notOwnedFlag: false,
+            noFoundFlag: false,
             requesto: {
                 title: "",
                 text: "",
                 tags: [],
             },
         };
+    },
+    created() {
+        this.getIdeaShowOwned();
     },
     methods: {
         checkField() {
@@ -209,10 +220,36 @@ export default {
             this.requesto.tags.splice(positionI, 1);
         },
 
+        getIdeaShowOwned() {
+            this.notOwnedFlag = false;
+            this.noFoundFlag = false;
+            const slug = this.$route.params.slug;
+            store
+                .dispatch("getIdeaShowOwned", slug)
+                .then((resp) => {
+                    if (resp.data) {
+                        this.requesto.title = resp.data[0].title;
+                        this.requesto.slug = resp.data[0].slug;
+                        this.requesto.text = resp.data[0].text;
+                        resp.data[1].forEach((element) => {
+                            this.requesto.tags.push(element.id);
+                        });
+                        this.tagsSelected = resp.data[1];
+                    } else {
+                        this.notOwnedFlag = true;
+                    }
+                })
+                .catch((er) => {
+                    this.noFoundFlag = true;
+                });
+        },
+
         postIdeaStore(ev) {
             ev.preventDefault();
+            const slug = this.$route.params.slug;
             const req = _.cloneDeep(this.requesto);
-            store.dispatch("postIdeaStore", req).then((res) => {
+            store.dispatch("updateIdea", [slug, req]).then((res) => {
+                console.log("in edit", res.data);
                 router.push({
                     name: "IdeaOwnedShow",
                     params: {

@@ -80,6 +80,7 @@ class IdeaController extends Controller
     {
         try {
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+            return [$idea, $idea->tags];
         } catch (ModelNotFoundException $e) {
             throw $e;
         }
@@ -91,7 +92,7 @@ class IdeaController extends Controller
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
             $user = Auth::user();
             if ($idea->user_id === $user->id) {
-                return $idea;
+                return [$idea, $idea->tags];
             } else if ($idea) {
                 return null;
             }
@@ -119,43 +120,62 @@ class IdeaController extends Controller
     //     }
     // }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate($this->getValidationRules());
-    //     $data = $request->all();
-    //     $idea = Idea::findOrFail($id);
-    //     if ($data['title'] !== $idea->title) {
-    //         $idea->slug = Idea::generateIdeasSlugFromTitle($data["title"]);
-    //     }
-    //     $idea->update($data);
-    //     $idea->save();
-    //     return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
-    // }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $slug)
+    {
+        $request->validate($this->getValidationRules());
+        $data = $request->all();
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+            $user = Auth::user();
+            if ($idea->user_id === $user->id) {
+                if ($data['title'] !== $idea->title) {
+                    $data['slug'] = Idea::generateIdeaSlugFromTitle($data['title']);
+                }
+                $idea->update($data);
+                $idea->save();
+                if (isset($data['tags'])) {
+                    $idea->tags()->sync($data['tags']);
+                } else {
+                    $idea->tags()->sync([]);
+                }
+                return $idea;
+            } else if ($idea) {
+                return null;
+            }
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
+    }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy($id)
-    // {
-    //     $idea = Idea::findOrFail($id);
-    //     $response = Gate::inspect('delete', $idea);
-    //     if ($response->allowed()) {
-    //         $idea->delete();
-    //         return redirect()->route('admin.ideas.index');
-    //     } else {
-    //         return view('admin.policy', compact("response"));
-    //     }
-    // }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($slug)
+    {
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+            $user = Auth::user();
+            if ($idea->user_id === $user->id) {
+                $idea->tags()->sync([]);
+                $idea->delete();
+                return true;
+            } else if ($idea) {
+                return null;
+            }
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
+    }
 
 
     private function getValidationRules()

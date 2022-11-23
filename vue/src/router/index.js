@@ -11,6 +11,7 @@ import IdeaShow from "../views/ideas/Show.vue";
 import IdeaOwnedIndex from "../views/ideas/OwnedIndex.vue";
 import IdeaOwnedShow from "../views/ideas/OwnedShow.vue";
 import IdeaCreate from "../views/ideas/Create.vue";
+import IdeaEdit from "../views/ideas/Edit.vue";
 import store from "../store/index.js";
 
 const routes = [
@@ -24,7 +25,6 @@ const routes = [
                 path: "/dashboard",
                 name: "Dashboard",
                 component: Dashboard,
-                children: [],
             },
             {
                 path: "/ideaindexowned",
@@ -40,6 +40,11 @@ const routes = [
                 path: `/ideaownedshow/:slug`,
                 name: "IdeaOwnedShow",
                 component: IdeaOwnedShow,
+            },
+            {
+                path: `/ideaedit/:slug`,
+                name: "IdeaEdit",
+                component: IdeaEdit,
             },
         ],
     },

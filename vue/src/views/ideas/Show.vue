@@ -7,6 +7,14 @@
                     <h6 class="card-subtitle mb-2 text-muted">
                         {{ idea.slug }}
                     </h6>
+                    <div class="d-flex">
+                        <span
+                            v-for="tag in tags"
+                            class="badge rounded-pill bg-success pt-1 pb-2 px-3"
+                            :class="tags[0] === tag ? '' : 'ms-2'"
+                            >{{ tag.name }}</span
+                        >
+                    </div>
                     <p class="card-text">
                         {{ idea.text }}
                     </p>
@@ -30,6 +38,7 @@ export default {
                 slug: "",
                 text: "",
             },
+            tags: [],
             noFoundFlag: false,
         };
     },
@@ -37,8 +46,6 @@ export default {
         this.getIdeaShow();
     },
     methods: {
-        // we have to pass the id of the idea we wanna show
-
         getIdeaShow() {
             this.noFoundFlag = false;
             const slug = this.$route.params.slug;
@@ -46,7 +53,8 @@ export default {
                 .dispatch("getIdeaShow", slug)
                 .then((resp) => {
                     if (resp.data) {
-                        this.idea = resp.data;
+                        this.idea = resp.data[0];
+                        this.tags = resp.data[1];
                     }
                 })
                 .catch((er) => {

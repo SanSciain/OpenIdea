@@ -94,14 +94,28 @@ const store = createStore({
             });
         },
         getIdeaShow({}, req) {
-            return axiosClient.get(`ideashow/${req}`).then((resp) => {
+            return axiosClient.get(`/ideashow/${req}`).then((resp) => {
                 return resp;
             });
         },
         getIdeaShowOwned({}, req) {
-            return axiosClient.get(`ideaownedshow/${req}`).then((resp) => {
+            return axiosClient.get(`/ideaownedshow/${req}`).then((resp) => {
                 return resp;
             });
+        },
+        deleteIdea({}, req) {
+            return axiosClient.delete(`/ideadelete/${req}`).then((resp) => {
+                return resp;
+            });
+        },
+        updateIdea({}, [slug, req]) {
+            console.log("slug", slug);
+            console.log("req", req);
+            return axiosClient
+                .patch(`/ideaupdate/${slug}`, req)
+                .then((resp) => {
+                    return resp;
+                });
         },
     },
     mutations: {

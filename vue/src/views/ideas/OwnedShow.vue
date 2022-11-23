@@ -1,15 +1,36 @@
 <template>
-    <div>
-        <div v-if="!notOwnedFlag && !noFoundFlag">
+    <div class="position-realtive">
+        <div
+            v-if="!notOwnedFlag && !noFoundFlag"
+            :class="deleteAlertFlag ? 'pe-none opacity-50' : ''"
+        >
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ idea.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">
                         {{ idea.slug }}
                     </h6>
+                    <div class="d-flex">
+                        <span
+                            v-for="tag in tags"
+                            class="badge rounded-pill bg-success pt-1 pb-2 px-3"
+                            :class="tags[0] === tag ? '' : 'ms-2'"
+                            >{{ tag.name }}</span
+                        >
+                    </div>
                     <p class="card-text">
                         {{ idea.text }}
                     </p>
+                    <router-link :to="{ name: 'IdeaEdit' }"
+                        ><span class="btn btn-info">Edit</span></router-link
+                    >
+                    <button
+                        class="btn btn-danger ms-2"
+                        type="button"
+                        @click="deleteAlertFlag = true"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
@@ -19,11 +40,34 @@
         <div v-else>
             <h3 class="text-center text-danger">Idea not found</h3>
         </div>
+        <div
+            v-if="deleteAlertFlag"
+            class="position-absolute top-50 start-50 translate-middle bg-secondary p-5 rounded-3 pe-auto opacity-100"
+        >
+            <p>Are you sure to delete this idea?</p>
+            <div class="d-flex justify-content-around">
+                <button
+                    class="btn btn-danger"
+                    type="button"
+                    @click="deleteIdea"
+                >
+                    Yes
+                </button>
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    @click="deleteAlertFlag = false"
+                >
+                    No
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import store from "../../store";
+import router from "../../router";
 export default {
     name: "OwnedShow",
     data() {
@@ -35,14 +79,14 @@ export default {
             },
             notOwnedFlag: false,
             noFoundFlag: false,
+            tags: [],
+            deleteAlertFlag: false,
         };
     },
     created() {
         this.getIdeaShowOwned();
     },
     methods: {
-        // we have to pass the id of the idea we wanna show
-
         getIdeaShowOwned() {
             this.notOwnedFlag = false;
             this.noFoundFlag = false;
@@ -51,7 +95,24 @@ export default {
                 .dispatch("getIdeaShowOwned", slug)
                 .then((resp) => {
                     if (resp.data) {
-                        this.idea = resp.data;
+                        this.idea = resp.data[0];
+                        this.tags = resp.data[1];
+                    } else {
+                        this.notOwnedFlag = true;
+                    }
+                })
+                .catch((er) => {
+                    this.noFoundFlag = true;
+                });
+        },
+
+        deleteIdea() {
+            const slug = this.$route.params.slug;
+            store
+                .dispatch("deleteIdea", slug)
+                .then((resp) => {
+                    if (resp.data) {
+                        router.push({ name: "IdeaOwnedIndex" });
                     } else {
                         this.notOwnedFlag = true;
                     }

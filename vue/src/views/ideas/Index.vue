@@ -4,15 +4,22 @@
         <div class="container" v-if="ideaFlag">
             <div class="row justify-content-start g-5">
                 <div v-for="idea in ideas" class="col col-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ idea.title }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                {{ idea.slug }}
-                            </h6>
-                            <p class="card-text">{{ idea.text }}</p>
+                    <router-link
+                        :to="{
+                            name: 'IdeaShow',
+                            params: { slug: idea.slug },
+                        }"
+                    >
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ idea.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    {{ idea.slug }}
+                                </h6>
+                                <p class="card-text">{{ idea.text }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </router-link>
                 </div>
             </div>
         </div>

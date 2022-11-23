@@ -23,9 +23,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/ideaownedindex', [IdeaController::class, 'indexOwned']);
-    // Route::get('/ideacreate', [IdeaController::class, 'create']);
+    Route::get('/ideacreate', [IdeaController::class, 'create']);
     Route::post('/ideastore', [IdeaController::class, 'store']);
     Route::get('/ideaownedshow/{slug}', [IdeaController::class, 'showOwned']);
+    Route::delete('/ideadelete/{slug}', [IdeaController::class, 'destroy']);
+    Route::patch('/ideaupdate/{slug}', [IdeaController::class, 'update']);
     Route::get('/tagindex', [TagController::class, 'index']);
 });
 

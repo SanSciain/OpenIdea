@@ -7,7 +7,9 @@ import AuthLayout from "../layouts/AuthLayout.vue";
 import MainLayout from "../layouts/MainLayout.vue";
 import GuestLayout from "../layouts/GuestLayout.vue";
 import IdeaIndex from "../views/ideas/Index.vue";
+import IdeaShow from "../views/ideas/Show.vue";
 import IdeaOwnedIndex from "../views/ideas/OwnedIndex.vue";
+import IdeaOwnedShow from "../views/ideas/OwnedShow.vue";
 import IdeaCreate from "../views/ideas/Create.vue";
 import store from "../store/index.js";
 
@@ -34,6 +36,11 @@ const routes = [
                 name: "IdeaCreate",
                 component: IdeaCreate,
             },
+            {
+                path: `/ideaownedshow/:slug`,
+                name: "IdeaOwnedShow",
+                component: IdeaOwnedShow,
+            },
         ],
     },
     {
@@ -45,6 +52,11 @@ const routes = [
                 path: "/ideaindex",
                 name: "IdeaIndex",
                 component: IdeaIndex,
+            },
+            {
+                path: `/ideashow/:slug`,
+                name: "IdeaShow",
+                component: IdeaShow,
             },
         ],
     },

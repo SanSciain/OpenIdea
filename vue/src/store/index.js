@@ -88,8 +88,20 @@ const store = createStore({
                     return resp;
                 });
         },
-        postIdeaStore({}, req) {
-            return axiosClient.post("/ideastore", req);
+        postIdeaStore({ commit }, req) {
+            return axiosClient.post("/ideastore", req).then((resp) => {
+                return resp;
+            });
+        },
+        getIdeaShow({}, req) {
+            return axiosClient.get(`ideashow/${req}`).then((resp) => {
+                return resp;
+            });
+        },
+        getIdeaShowOwned({}, req) {
+            return axiosClient.get(`ideaownedshow/${req}`).then((resp) => {
+                return resp;
+            });
         },
     },
     mutations: {

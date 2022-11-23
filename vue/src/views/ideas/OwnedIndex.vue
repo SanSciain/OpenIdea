@@ -2,9 +2,9 @@
     <div>
         <h1>Owned ideas</h1>
         <div class="container" v-if="ideaFlag">
-            <div class="row justify-content-start">
+            <div class="row justify-content-start g-5">
                 <div v-for="idea in ideas" class="col col-3">
-                    <div class="card" style="width: 18rem">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ idea.title }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">

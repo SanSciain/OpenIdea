@@ -207,16 +207,15 @@ export default {
             this.requesto.tags.splice(positionI, 1);
         },
 
-        // Add removing tag
-
-        // Add controll if tag is already added
-
         postIdeaStore(ev) {
             ev.preventDefault();
             const req = _.cloneDeep(this.requesto);
             store.dispatch("postIdeaStore", req).then((res) => {
                 router.push({
-                    name: "Dashboard",
+                    name: "IdeaOwnedShow",
+                    params: {
+                        slug: res.data.slug,
+                    },
                 });
             });
         },

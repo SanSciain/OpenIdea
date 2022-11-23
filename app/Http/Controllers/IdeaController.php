@@ -7,6 +7,11 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class IdeaController extends Controller
 {
     /**
@@ -28,16 +33,16 @@ class IdeaController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $tags = Tag::all();
-        return response([$tags]);
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create()
+    // {
+    //     $tags = Tag::all();
+    //     return response([$tags]);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -61,26 +66,39 @@ class IdeaController extends Controller
             $idea->tags()->sync($data['tags']);
         };
 
+        return $idea;
         // // return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show($id)
-    // {
-    //     $idea = Idea::findOrFail($id);
-    //     $response = Gate::inspect('view', $idea);
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($slug)
+    {
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
+    }
 
-    //     if ($response->allowed()) {
-    //         return view('admin.ideas.show', compact('idea'));
-    //     } else {
-    //         return view('admin.ideas.showpublic', compact('idea'));
-    //     }
-    // }
+    public function showOwned($slug)
+    {
+        try {
+            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+            $user = Auth::user();
+            if ($idea->user_id === $user->id) {
+                return $idea;
+            } else if ($idea) {
+                return null;
+            }
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
+    }
 
     // /**
     //  * Show the form for editing the specified resource.

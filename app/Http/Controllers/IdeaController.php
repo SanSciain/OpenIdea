@@ -28,16 +28,16 @@ class IdeaController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $tags = Tag::all();
-        return response([$tags]);
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create()
+    // {
+    //     $tags = Tag::all();
+    //     return response([$tags]);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -61,26 +61,33 @@ class IdeaController extends Controller
             $idea->tags()->sync($data['tags']);
         };
 
+        return $idea;
         // // return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show($id)
-    // {
-    //     $idea = Idea::findOrFail($id);
-    //     $response = Gate::inspect('view', $idea);
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $idea = Idea::findOrFail($id);
+        return $idea;
+    }
 
-    //     if ($response->allowed()) {
-    //         return view('admin.ideas.show', compact('idea'));
-    //     } else {
-    //         return view('admin.ideas.showpublic', compact('idea'));
-    //     }
-    // }
+    public function showOwned($id)
+    {
+        $user = Auth::user();
+        $idea = Idea::findOrFail($id);
+        if ($idea->user->id === $user->id) {
+            return $idea;
+        } else {
+            return "you don't own that idea";
+        }
+        // $idea = Idea::findOrFail($id)->where('user_id', $user->id)->first();
+    }
 
     // /**
     //  * Show the form for editing the specified resource.

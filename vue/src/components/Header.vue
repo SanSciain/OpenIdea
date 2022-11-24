@@ -86,19 +86,24 @@
                                             >
                                         </li>
                                         <li class="p-2">
-                                            <router-link to="Dashboard"
+                                            <router-link
+                                                @click="
+                                                    settingsDropdownFlag = false
+                                                "
+                                                :to="{ name: 'Dashboard' }"
                                                 >Dashboard</router-link
                                             >
                                         </li>
                                     </ul>
                                     <ul v-else>
                                         <li class="p-2">
-                                            <router-link to="Login"
+                                            <router-link :to="{ name: 'Login' }"
                                                 >Login</router-link
                                             >
                                         </li>
                                         <li class="p-2">
-                                            <router-link to="Register"
+                                            <router-link
+                                                :to="{ name: 'Register' }"
                                                 >Register</router-link
                                             >
                                         </li>

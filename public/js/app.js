@@ -2549,7 +2549,6 @@ __webpack_require__.r(__webpack_exports__);
       var slug = this.$route.params.slug;
       var req = _.cloneDeep(this.requesto);
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("updateIdea", [slug, req]).then(function (res) {
-        console.log("in edit", res.data);
         _router__WEBPACK_IMPORTED_MODULE_1__["default"].push({
           name: "IdeaOwnedShow",
           params: {
@@ -2922,21 +2921,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.logout && $options.logout.apply($options, arguments);
     })
   }, "Logout")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "Dashboard"
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $data.settingsDropdownFlag = false;
+    }),
+    to: {
+      name: 'Dashboard'
+    }
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dashboard")];
     }),
     _: 1 /* STABLE */
   })])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "Login"
+    to: {
+      name: 'Login'
+    }
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Login")];
     }),
     _: 1 /* STABLE */
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "Register"
+    to: {
+      name: 'Register'
+    }
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Register")];
@@ -46328,8 +46336,6 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
       var _ref12 = _slicedToArray(_ref11, 2),
         slug = _ref12[0],
         req = _ref12[1];
-      console.log("slug", slug);
-      console.log("req", req);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaupdate/".concat(slug), req).then(function (resp) {
         return resp;
       });

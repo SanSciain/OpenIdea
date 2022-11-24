@@ -249,7 +249,6 @@ export default {
             const slug = this.$route.params.slug;
             const req = _.cloneDeep(this.requesto);
             store.dispatch("updateIdea", [slug, req]).then((res) => {
-                console.log("in edit", res.data);
                 router.push({
                     name: "IdeaOwnedShow",
                     params: {

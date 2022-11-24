@@ -109,8 +109,6 @@ const store = createStore({
             });
         },
         updateIdea({}, [slug, req]) {
-            console.log("slug", slug);
-            console.log("req", req);
             return axiosClient
                 .patch(`/ideaupdate/${slug}`, req)
                 .then((resp) => {

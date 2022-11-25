@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,6 +65,12 @@ class IdeaController extends Controller
             $idea->tags()->sync($data['tags']);
         };
 
+        if (isset($data['roles'])) {
+            foreach ($data['roles'] as $role_id) {
+                $idea->roles()->attach([$role_id => ['assigned' => false]]);
+            }
+        };
+
         return $idea;
         // // return redirect()->route('admin.ideas.show', ['idea' => $idea->id]);
     }
@@ -80,7 +85,7 @@ class IdeaController extends Controller
     {
         try {
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
-            return [$idea, $idea->tags];
+            return [$idea, $idea->tags, $idea->roles];
         } catch (ModelNotFoundException $e) {
             throw $e;
         }
@@ -92,7 +97,7 @@ class IdeaController extends Controller
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
             $user = Auth::user();
             if ($idea->user_id === $user->id) {
-                return [$idea, $idea->tags];
+                return [$idea, $idea->tags, $idea->roles];
             } else if ($idea) {
                 return null;
             }
@@ -145,6 +150,15 @@ class IdeaController extends Controller
                 } else {
                     $idea->tags()->sync([]);
                 }
+                if (isset($data['roles'])) {
+                    $idea->roles()->sync([]);
+                    foreach ($data['roles'] as $role_id) {
+                        // check if it is already assigned 
+                        $idea->roles()->attach([$role_id => ['assigned' => false]]);
+                    }
+                } else {
+                    $idea->roles()->sync([]);
+                }
                 return $idea;
             } else if ($idea) {
                 return null;
@@ -167,6 +181,7 @@ class IdeaController extends Controller
             $user = Auth::user();
             if ($idea->user_id === $user->id) {
                 $idea->tags()->sync([]);
+                $idea->roles()->sync([]);
                 $idea->delete();
                 return true;
             } else if ($idea) {

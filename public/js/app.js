@@ -2332,21 +2332,28 @@ __webpack_require__.r(__webpack_exports__);
   name: "Create",
   data: function data() {
     return {
-      // title: "",
-      // text: "",
+      submitDisable: true,
+      // Tags Data
       tagSearched: "",
       tagSelected: "",
-      submitDisable: true,
       tagsMatching: [],
       tagsSelected: [],
-      // requesto.tags: [],
-      selectedFlag: false,
+      selectedTagFlag: false,
       tagAlreadyAddedFlag: false,
       tagSelectedId: null,
+      // Roles Data
+      roleSearched: "",
+      roleSelected: "",
+      rolesMatching: [],
+      rolesSelected: [],
+      selectedRoleFlag: false,
+      roleAlreadyAddedFlag: false,
+      roleSelectedId: null,
       requesto: {
         title: "",
         text: "",
-        tags: []
+        tags: [],
+        roles: []
       }
     };
   },
@@ -2357,9 +2364,10 @@ __webpack_require__.r(__webpack_exports__);
         this.submitDisable = false;
       }
     },
+    // Tags Function
     tagSearch: function tagSearch() {
       var _this = this;
-      this.selectedFlag = false;
+      this.selectedTagFlag = false;
       this.tagAlreadyAddedFlag = false;
       if (this.tagSearched.length) {
         _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getMatchingTags", {
@@ -2373,39 +2381,66 @@ __webpack_require__.r(__webpack_exports__);
         this.tagsMatching = [];
       }
     },
-    // tagSearch() {
-    //     store
-    //         .dispatch("getMatchingTags", {
-    //             tagSearched: this.tagSearched,
-    //         })
-    //         .then((resp) => {
-    //             if (resp.data[0].length) {
-    //                 this.tagsMatching = resp.data[0];
-    //                 this.matchFlag = true;
-    //             } else {
-    //                 this.matchFlag = false;
-    //             }
-    //         });
-    // },
     selectMatchingTag: function selectMatchingTag() {
       this.tagSearched = this.tagSelected.name;
-      this.selectedFlag = true;
+      this.selectedTagFlag = true;
       this.tagSelectedId = this.tagSelected.id;
     },
     addTag: function addTag() {
-      if (this.selectedFlag && !this.requesto.tags.includes(this.tagSelectedId)) {
+      if (this.selectedTagFlag && !this.requesto.tags.includes(this.tagSelectedId)) {
         this.tagsSelected.push(this.tagSelected);
         this.requesto.tags.push(this.tagSelectedId);
         this.tagSearched = "";
+        this.tagAlreadyAddedFlag = false;
       } else if (this.requesto.tags.includes(this.tagSelectedId)) {
         this.tagAlreadyAddedFlag = true;
       }
+      this.selectedTagFlag = false;
     },
     removeTag: function removeTag(tag) {
       var positionN = this.tagsSelected.indexOf(tag.name);
-      this.tagsSelected.splice(positionN, 1);
+      this.tagsSelected.splice(positionN - 1, 1);
       var positionI = this.tagsSelected.indexOf(tag.id);
-      this.requesto.tags.splice(positionI, 1);
+      this.requesto.tags.splice(positionI - 1, 1);
+    },
+    // Roles Functions
+    roleSearch: function roleSearch() {
+      var _this2 = this;
+      this.selectedRoleFlag = false;
+      this.roleAlreadyAddedFlag = false;
+      if (this.roleSearched.length) {
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getMatchingRoles", {
+          roleSearched: this.roleSearched
+        }).then(function (resp) {
+          if (resp.data[0].length) {
+            _this2.rolesMatching = resp.data[0];
+          }
+        });
+      } else {
+        this.rolesMatching = [];
+      }
+    },
+    selectMatchingRole: function selectMatchingRole() {
+      this.roleSearched = this.roleSelected.name;
+      this.selectedRoleFlag = true;
+      this.roleSelectedId = this.roleSelected.id;
+    },
+    addRole: function addRole() {
+      if (this.selectedRoleFlag && !this.requesto.roles.includes(this.roleSelectedId)) {
+        this.rolesSelected.push(this.roleSelected);
+        this.requesto.roles.push(this.roleSelectedId);
+        this.roleSearched = "";
+        this.roleAlreadyAddedFlag = false;
+      } else if (this.requesto.roles.includes(this.roleSelectedId)) {
+        this.roleAlreadyAddedFlag = true;
+      }
+      this.selectedRoleFlag = false;
+    },
+    removeRole: function removeRole(role) {
+      var positionN = this.rolesSelected.indexOf(role.name);
+      this.rolesSelected.splice(positionN - 1, 1);
+      var positionI = this.rolesSelected.indexOf(role.id);
+      this.requesto.roles.splice(positionI - 1, 1);
     },
     postIdeaStore: function postIdeaStore(ev) {
       ev.preventDefault();
@@ -2443,23 +2478,30 @@ __webpack_require__.r(__webpack_exports__);
   name: "Edit",
   data: function data() {
     return {
-      // title: "",
-      // text: "",
-      tagSearched: "",
-      tagSelected: "",
       submitDisable: false,
-      tagsMatching: [],
-      tagsSelected: [],
-      // requesto.tags: [],
-      selectedFlag: false,
-      tagAlreadyAddedFlag: false,
-      tagSelectedId: null,
       notOwnedFlag: false,
       noFoundFlag: false,
+      // Tags Data
+      tagSearched: "",
+      tagSelected: "",
+      tagsMatching: [],
+      tagsSelected: [],
+      selectedTagFlag: false,
+      tagAlreadyAddedFlag: false,
+      tagSelectedId: null,
+      // Roles Data
+      roleSearched: "",
+      roleSelected: "",
+      rolesMatching: [],
+      rolesSelected: [],
+      selectedRoleFlag: false,
+      roleAlreadyAddedFlag: false,
+      roleSelectedId: null,
       requesto: {
         title: "",
         text: "",
-        tags: []
+        tags: [],
+        roles: []
       }
     };
   },
@@ -2473,9 +2515,10 @@ __webpack_require__.r(__webpack_exports__);
         this.submitDisable = false;
       }
     },
+    // Tags Function
     tagSearch: function tagSearch() {
       var _this = this;
-      this.selectedFlag = false;
+      this.selectedTagFlag = false;
       this.tagAlreadyAddedFlag = false;
       if (this.tagSearched.length) {
         _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getMatchingTags", {
@@ -2489,62 +2532,69 @@ __webpack_require__.r(__webpack_exports__);
         this.tagsMatching = [];
       }
     },
-    // tagSearch() {
-    //     store
-    //         .dispatch("getMatchingTags", {
-    //             tagSearched: this.tagSearched,
-    //         })
-    //         .then((resp) => {
-    //             if (resp.data[0].length) {
-    //                 this.tagsMatching = resp.data[0];
-    //                 this.matchFlag = true;
-    //             } else {
-    //                 this.matchFlag = false;
-    //             }
-    //         });
-    // },
     selectMatchingTag: function selectMatchingTag() {
       this.tagSearched = this.tagSelected.name;
-      this.selectedFlag = true;
+      this.selectedTagFlag = true;
       this.tagSelectedId = this.tagSelected.id;
     },
     addTag: function addTag() {
-      if (this.selectedFlag && !this.requesto.tags.includes(this.tagSelectedId)) {
+      if (this.selectedTagFlag && !this.requesto.tags.includes(this.tagSelectedId)) {
         this.tagsSelected.push(this.tagSelected);
         this.requesto.tags.push(this.tagSelectedId);
         this.tagSearched = "";
+        this.tagAlreadyAddedFlag = false;
       } else if (this.requesto.tags.includes(this.tagSelectedId)) {
         this.tagAlreadyAddedFlag = true;
       }
+      this.selectedTagFlag = false;
     },
     removeTag: function removeTag(tag) {
       var positionN = this.tagsSelected.indexOf(tag.name);
-      this.tagsSelected.splice(positionN, 1);
+      this.tagsSelected.splice(positionN - 1, 1);
       var positionI = this.tagsSelected.indexOf(tag.id);
-      this.requesto.tags.splice(positionI, 1);
+      this.requesto.tags.splice(positionI - 1, 1);
     },
-    getIdeaShowOwned: function getIdeaShowOwned() {
+    // Roles Functions
+    roleSearch: function roleSearch() {
       var _this2 = this;
-      this.notOwnedFlag = false;
-      this.noFoundFlag = false;
-      var slug = this.$route.params.slug;
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShowOwned", slug).then(function (resp) {
-        if (resp.data) {
-          _this2.requesto.title = resp.data[0].title;
-          _this2.requesto.slug = resp.data[0].slug;
-          _this2.requesto.text = resp.data[0].text;
-          resp.data[1].forEach(function (element) {
-            _this2.requesto.tags.push(element.id);
-          });
-          _this2.tagsSelected = resp.data[1];
-        } else {
-          _this2.notOwnedFlag = true;
-        }
-      })["catch"](function (er) {
-        _this2.noFoundFlag = true;
-      });
+      this.selectedRoleFlag = false;
+      this.roleAlreadyAddedFlag = false;
+      if (this.roleSearched.length) {
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getMatchingRoles", {
+          roleSearched: this.roleSearched
+        }).then(function (resp) {
+          if (resp.data[0].length) {
+            _this2.rolesMatching = resp.data[0];
+          }
+        });
+      } else {
+        this.rolesMatching = [];
+      }
     },
-    postIdeaStore: function postIdeaStore(ev) {
+    selectMatchingRole: function selectMatchingRole() {
+      this.roleSearched = this.roleSelected.name;
+      this.selectedRoleFlag = true;
+      this.roleSelectedId = this.roleSelected.id;
+    },
+    addRole: function addRole() {
+      if (this.selectedRoleFlag && !this.requesto.roles.includes(this.roleSelectedId)) {
+        this.rolesSelected.push(this.roleSelected);
+        this.requesto.roles.push(this.roleSelectedId);
+        this.roleSearched = "";
+        this.roleAlreadyAddedFlag = false;
+      } else if (this.requesto.roles.includes(this.roleSelectedId)) {
+        this.roleAlreadyAddedFlag = true;
+      }
+      this.selectedRoleFlag = false;
+    },
+    removeRole: function removeRole(role) {
+      console.log("in edit remove role", role);
+      var positionN = this.rolesSelected.indexOf(role.name);
+      this.rolesSelected.splice(positionN - 1, 1);
+      var positionI = this.rolesSelected.indexOf(role.id);
+      this.requesto.roles.splice(positionI - 1, 1);
+    },
+    updateIdea: function updateIdea(ev) {
       ev.preventDefault();
       var slug = this.$route.params.slug;
       var req = _.cloneDeep(this.requesto);
@@ -2555,6 +2605,31 @@ __webpack_require__.r(__webpack_exports__);
             slug: res.data.slug
           }
         });
+      });
+    },
+    getIdeaShowOwned: function getIdeaShowOwned() {
+      var _this3 = this;
+      this.notOwnedFlag = false;
+      this.noFoundFlag = false;
+      var slug = this.$route.params.slug;
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getIdeaShowOwned", slug).then(function (resp) {
+        if (resp.data) {
+          _this3.requesto.title = resp.data[0].title;
+          _this3.requesto.slug = resp.data[0].slug;
+          _this3.requesto.text = resp.data[0].text;
+          resp.data[1].forEach(function (element) {
+            _this3.requesto.tags.push(element.id);
+          });
+          resp.data[2].forEach(function (element) {
+            _this3.requesto.roles.push(element.id);
+          });
+          _this3.tagsSelected = resp.data[1];
+          _this3.rolesSelected = resp.data[2];
+        } else {
+          _this3.notOwnedFlag = true;
+        }
+      })["catch"](function (er) {
+        _this3.noFoundFlag = true;
       });
     }
   }
@@ -2671,6 +2746,7 @@ __webpack_require__.r(__webpack_exports__);
       notOwnedFlag: false,
       noFoundFlag: false,
       tags: [],
+      roles: [],
       deleteAlertFlag: false
     };
   },
@@ -2687,6 +2763,7 @@ __webpack_require__.r(__webpack_exports__);
         if (resp.data) {
           _this.idea = resp.data[0];
           _this.tags = resp.data[1];
+          _this.roles = resp.data[2];
         } else {
           _this.notOwnedFlag = true;
         }
@@ -2737,6 +2814,7 @@ __webpack_require__.r(__webpack_exports__);
         text: ""
       },
       tags: [],
+      roles: [],
       noFoundFlag: false
     };
   },
@@ -2752,6 +2830,7 @@ __webpack_require__.r(__webpack_exports__);
         if (resp.data) {
           _this.idea = resp.data[0];
           _this.tags = resp.data[1];
+          _this.roles = resp.data[2];
         }
       })["catch"](function (er) {
         _this.noFoundFlag = true;
@@ -3341,7 +3420,7 @@ var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "tagSearchbar",
     "class": "form-label fw-bold"
-  }, "Tags* :", -1 /* HOISTED */);
+  }, "Tags :", -1 /* HOISTED */);
 });
 var _hoisted_13 = {
   key: 1,
@@ -3355,8 +3434,44 @@ var _hoisted_14 = {
 };
 var _hoisted_15 = ["value"];
 var _hoisted_16 = ["disabled"];
-var _hoisted_17 = ["disabled"];
-var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_17 = {
+  "class": "mb-3"
+};
+var _hoisted_18 = {
+  id: "rolesSelected",
+  "class": "d-flex"
+};
+var _hoisted_19 = ["onClick"];
+var _hoisted_20 = {
+  key: 0,
+  id: "roleAlreadyAdded"
+};
+var _hoisted_21 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+    "class": "text-center text-danger"
+  }, " role already added ", -1 /* HOISTED */);
+});
+var _hoisted_22 = [_hoisted_21];
+var _hoisted_23 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "for": "roleSearchbar",
+    "class": "form-label fw-bold"
+  }, "Roles :", -1 /* HOISTED */);
+});
+var _hoisted_24 = {
+  key: 1,
+  id: "containerSearchedrole"
+};
+var _hoisted_25 = {
+  key: 0,
+  value: "",
+  selected: "",
+  disabled: ""
+};
+var _hoisted_26 = ["value"];
+var _hoisted_27 = ["disabled"];
+var _hoisted_28 = ["disabled"];
+var _hoisted_29 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
     "class": "text-center"
   }, "* These fields are required", -1 /* HOISTED */);
@@ -3364,7 +3479,7 @@ var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-    onSubmit: _cache[9] || (_cache[9] = function () {
+    onSubmit: _cache[14] || (_cache[14] = function () {
       return $options.postIdeaStore && $options.postIdeaStore.apply($options, arguments);
     })
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -3389,7 +3504,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onKeyup: _cache[3] || (_cache[3] = function () {
       return $options.checkField && $options.checkField.apply($options, arguments);
     })
-  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.requesto.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsSelected, function (el, index) {
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.requesto.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Tags Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsSelected, function (el, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-success py-2 ps-4 pe-3 d-flex align-items-center ms-badge", index === 0 ? '' : 'ms-2'])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -3435,16 +3550,66 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     id: "add-tag-btn",
     "class": "btn btn-success",
-    disabled: !$data.selectedFlag,
+    disabled: !$data.selectedTagFlag,
     onClick: _cache[8] || (_cache[8] = function () {
       return $options.addTag && $options.addTag.apply($options, arguments);
     })
-  }, " Add + ", 8 /* PROPS */, _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Add + ", 8 /* PROPS */, _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Tags Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Roles Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.rolesSelected, function (el, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-warning text-body py-2 ps-4 pe-3 d-flex align-items-center ms-badge", index === 0 ? '' : 'ms-2'])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "btn-close ms-2",
+      "aria-label": "Close",
+      onClick: function onClick($event) {
+        return $options.removeRole(el);
+      }
+    }, null, 8 /* PROPS */, _hoisted_19)], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))]), $data.roleAlreadyAddedFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, _hoisted_22)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "class": "form-control",
+    name: "roleSearchbar",
+    id: "roleSearchbar",
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+      return $data.roleSearched = $event;
+    }),
+    onKeyup: _cache[10] || (_cache[10] = function () {
+      return $options.roleSearch && $options.roleSearch.apply($options, arguments);
+    })
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.roleSearched]]), $data.roleSearched.length > 0 && $data.roleSearched !== $data.roleSelected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    name: "roleList",
+    id: "roleList",
+    "class": "form-select w-100",
+    size: "3",
+    "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+      return $data.roleSelected = $event;
+    }),
+    onClick: _cache[12] || (_cache[12] = function () {
+      return $options.selectMatchingRole && $options.selectMatchingRole.apply($options, arguments);
+    })
+  }, [!$data.rolesMatching.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", _hoisted_25, " No role found ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.rolesMatching, function (role) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      value: {
+        id: role.id,
+        name: role.name
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name), 9 /* TEXT, PROPS */, _hoisted_26);
+  }), 256 /* UNKEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.roleSelected]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "add-role-btn",
+    "class": "btn btn-success",
+    disabled: !$data.selectedRoleFlag,
+    onClick: _cache[13] || (_cache[13] = function () {
+      return $options.addRole && $options.addRole.apply($options, arguments);
+    })
+  }, " Add + ", 8 /* PROPS */, _hoisted_27)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Roles Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn btn-primary",
     disabled: $data.submitDisable,
     id: "submitButton"
-  }, " Submit ", 8 /* PROPS */, _hoisted_17)], 32 /* HYDRATE_EVENTS */), _hoisted_18])]);
+  }, " Submit ", 8 /* PROPS */, _hoisted_28)], 32 /* HYDRATE_EVENTS */), _hoisted_29])]);
 }
 
 /***/ }),
@@ -3509,7 +3674,7 @@ var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "tagSearchbar",
     "class": "form-label fw-bold"
-  }, "Tags* :", -1 /* HOISTED */);
+  }, "Tags :", -1 /* HOISTED */);
 });
 var _hoisted_13 = {
   key: 1,
@@ -3523,34 +3688,65 @@ var _hoisted_14 = {
 };
 var _hoisted_15 = ["value"];
 var _hoisted_16 = ["disabled"];
-var _hoisted_17 = ["disabled"];
-var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_17 = {
+  "class": "mb-3"
+};
+var _hoisted_18 = {
+  id: "rolesSelected",
+  "class": "d-flex"
+};
+var _hoisted_19 = ["onClick"];
+var _hoisted_20 = {
+  key: 0,
+  id: "roleAlreadyAdded"
+};
+var _hoisted_21 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-    "class": "text-center"
-  }, "* These fields are required", -1 /* HOISTED */);
+    "class": "text-center text-danger"
+  }, " role already added ", -1 /* HOISTED */);
 });
-var _hoisted_19 = {
+var _hoisted_22 = [_hoisted_21];
+var _hoisted_23 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "for": "roleSearchbar",
+    "class": "form-label fw-bold"
+  }, "Roles :", -1 /* HOISTED */);
+});
+var _hoisted_24 = {
+  key: 1,
+  id: "containerSearchedrole"
+};
+var _hoisted_25 = {
+  key: 0,
+  value: "",
+  selected: "",
+  disabled: ""
+};
+var _hoisted_26 = ["value"];
+var _hoisted_27 = ["disabled"];
+var _hoisted_28 = ["disabled"];
+var _hoisted_29 = {
   key: 1
 };
-var _hoisted_20 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_30 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
     "class": "text-center text-danger"
   }, "You don't own this idea", -1 /* HOISTED */);
 });
-var _hoisted_21 = [_hoisted_20];
-var _hoisted_22 = {
+var _hoisted_31 = [_hoisted_30];
+var _hoisted_32 = {
   key: 2
 };
-var _hoisted_23 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_33 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
     "class": "text-center text-danger"
   }, "Idea not found", -1 /* HOISTED */);
 });
-var _hoisted_24 = [_hoisted_23];
+var _hoisted_34 = [_hoisted_33];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-    onSubmit: _cache[9] || (_cache[9] = function () {
-      return $options.postIdeaStore && $options.postIdeaStore.apply($options, arguments);
+    onSubmit: _cache[14] || (_cache[14] = function () {
+      return $options.updateIdea && $options.updateIdea.apply($options, arguments);
     })
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
@@ -3574,7 +3770,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onKeyup: _cache[3] || (_cache[3] = function () {
       return $options.checkField && $options.checkField.apply($options, arguments);
     })
-  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.requesto.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsSelected, function (el, index) {
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.requesto.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Tags Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tagsSelected, function (el, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-success py-2 ps-4 pe-3 d-flex align-items-center ms-badge", index === 0 ? '' : 'ms-2'])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -3620,16 +3816,66 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     id: "add-tag-btn",
     "class": "btn btn-success",
-    disabled: !$data.selectedFlag,
+    disabled: !$data.selectedTagFlag,
     onClick: _cache[8] || (_cache[8] = function () {
       return $options.addTag && $options.addTag.apply($options, arguments);
     })
-  }, " Add + ", 8 /* PROPS */, _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Add + ", 8 /* PROPS */, _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Tags Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Roles Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.rolesSelected, function (el, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-warning text-body py-2 ps-4 pe-3 d-flex align-items-center ms-badge", index === 0 ? '' : 'ms-2'])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(el.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "btn-close ms-2",
+      "aria-label": "Close",
+      onClick: function onClick($event) {
+        return $options.removeRole(el);
+      }
+    }, null, 8 /* PROPS */, _hoisted_19)], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))]), $data.roleAlreadyAddedFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, _hoisted_22)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "class": "form-control",
+    name: "roleSearchbar",
+    id: "roleSearchbar",
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+      return $data.roleSearched = $event;
+    }),
+    onKeyup: _cache[10] || (_cache[10] = function () {
+      return $options.roleSearch && $options.roleSearch.apply($options, arguments);
+    })
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.roleSearched]]), $data.roleSearched.length > 0 && $data.roleSearched !== $data.roleSelected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    name: "roleList",
+    id: "roleList",
+    "class": "form-select w-100",
+    size: "3",
+    "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+      return $data.roleSelected = $event;
+    }),
+    onClick: _cache[12] || (_cache[12] = function () {
+      return $options.selectMatchingRole && $options.selectMatchingRole.apply($options, arguments);
+    })
+  }, [!$data.rolesMatching.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", _hoisted_25, " No role found ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.rolesMatching, function (role) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      value: {
+        id: role.id,
+        name: role.name
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name), 9 /* TEXT, PROPS */, _hoisted_26);
+  }), 256 /* UNKEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.roleSelected]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "add-role-btn",
+    "class": "btn btn-success",
+    disabled: !$data.selectedRoleFlag,
+    onClick: _cache[13] || (_cache[13] = function () {
+      return $options.addRole && $options.addRole.apply($options, arguments);
+    })
+  }, " Add + ", 8 /* PROPS */, _hoisted_27)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Roles Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn btn-primary",
     disabled: $data.submitDisable,
     id: "submitButton"
-  }, " Submit ", 8 /* PROPS */, _hoisted_17)], 32 /* HYDRATE_EVENTS */), _hoisted_18])) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, _hoisted_21)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, _hoisted_24))]);
+  }, " Submit ", 8 /* PROPS */, _hoisted_28)], 32 /* HYDRATE_EVENTS */)])) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, _hoisted_31)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, _hoisted_34))]);
 }
 
 /***/ }),
@@ -3785,7 +4031,7 @@ var _hoisted_1 = {
   "class": "position-realtive"
 };
 var _hoisted_2 = {
-  "class": "card"
+  "class": "card m-5"
 };
 var _hoisted_3 = {
   "class": "card-body"
@@ -3797,34 +4043,39 @@ var _hoisted_5 = {
   "class": "card-subtitle mb-2 text-muted"
 };
 var _hoisted_6 = {
+  key: 0,
   "class": "d-flex"
 };
 var _hoisted_7 = {
+  key: 1,
+  "class": "d-flex my-3"
+};
+var _hoisted_8 = {
   "class": "card-text"
 };
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "btn btn-info"
 }, "Edit", -1 /* HOISTED */);
-var _hoisted_9 = {
+var _hoisted_10 = {
   key: 1
 };
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-center text-danger"
 }, "You don't own this idea", -1 /* HOISTED */);
-var _hoisted_11 = [_hoisted_10];
-var _hoisted_12 = {
+var _hoisted_12 = [_hoisted_11];
+var _hoisted_13 = {
   key: 2
 };
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-center text-danger"
 }, "Idea not found", -1 /* HOISTED */);
-var _hoisted_14 = [_hoisted_13];
-var _hoisted_15 = {
+var _hoisted_15 = [_hoisted_14];
+var _hoisted_16 = {
   key: 3,
   "class": "position-absolute top-50 start-50 translate-middle bg-secondary p-5 rounded-3 pe-auto opacity-100"
 };
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Are you sure to delete this idea?", -1 /* HOISTED */);
-var _hoisted_17 = {
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Are you sure to delete this idea?", -1 /* HOISTED */);
+var _hoisted_18 = {
   "class": "d-flex justify-content-around"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3832,17 +4083,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [!$data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     key: 0,
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($data.deleteAlertFlag ? 'pe-none opacity-50' : '')
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tags, function (tag) {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), $data.tags.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tags, function (tag) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-success pt-1 pb-2 px-3", $data.tags[0] === tag ? '' : 'ms-2'])
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tag.name), 3 /* TEXT, CLASS */);
-  }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.roles.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.roles, function (role) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body", $data.roles[0] === role ? '' : 'ms-2'])
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name), 3 /* TEXT, CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: {
       name: 'IdeaEdit'
     }
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_8];
+      return [_hoisted_9];
     }),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -3851,7 +4106,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $data.deleteAlertFlag = true;
     })
-  }, " Delete ")])])], 2 /* CLASS */)) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, _hoisted_11)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, _hoisted_14)), $data.deleteAlertFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Delete ")])])], 2 /* CLASS */)) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, _hoisted_12)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, _hoisted_15)), $data.deleteAlertFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-danger",
     type: "button",
     onClick: _cache[1] || (_cache[1] = function () {
@@ -3885,7 +4140,7 @@ var _hoisted_1 = {
   key: 0
 };
 var _hoisted_2 = {
-  "class": "card"
+  "class": "card m-5"
 };
 var _hoisted_3 = {
   "class": "card-body"
@@ -3897,24 +4152,33 @@ var _hoisted_5 = {
   "class": "card-subtitle mb-2 text-muted"
 };
 var _hoisted_6 = {
+  key: 0,
   "class": "d-flex"
 };
 var _hoisted_7 = {
-  "class": "card-text"
+  key: 1,
+  "class": "d-flex my-3"
 };
 var _hoisted_8 = {
+  "class": "card-text"
+};
+var _hoisted_9 = {
   key: 1
 };
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-center text-danger"
 }, "Idea not found", -1 /* HOISTED */);
-var _hoisted_10 = [_hoisted_9];
+var _hoisted_11 = [_hoisted_10];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tags, function (tag) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), $data.tags.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tags, function (tag) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-success pt-1 pb-2 px-3", $data.tags[0] === tag ? '' : 'ms-2'])
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tag.name), 3 /* TEXT, CLASS */);
-  }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, _hoisted_10))]);
+  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.roles.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.roles, function (role) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body", $data.roles[0] === role ? '' : 'ms-2'])
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name), 3 /* TEXT, CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */)])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, _hoisted_11))]);
 }
 
 /***/ }),
@@ -46307,35 +46571,45 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
         return resp;
       });
     },
-    postIdeaStore: function postIdeaStore(_ref6, req) {
-      var commit = _ref6.commit;
+    getMatchingRoles: function getMatchingRoles(_ref6, roleSrc) {
+      _objectDestructuringEmpty(_ref6);
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/roleindex", {
+        params: {
+          roleSearched: roleSrc.roleSearched
+        }
+      }).then(function (resp) {
+        return resp;
+      });
+    },
+    postIdeaStore: function postIdeaStore(_ref7, req) {
+      _objectDestructuringEmpty(_ref7);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post("/ideastore", req).then(function (resp) {
         return resp;
       });
     },
-    getIdeaShow: function getIdeaShow(_ref7, req) {
-      _objectDestructuringEmpty(_ref7);
+    getIdeaShow: function getIdeaShow(_ref8, req) {
+      _objectDestructuringEmpty(_ref8);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/ideashow/".concat(req)).then(function (resp) {
         return resp;
       });
     },
-    getIdeaShowOwned: function getIdeaShowOwned(_ref8, req) {
-      _objectDestructuringEmpty(_ref8);
+    getIdeaShowOwned: function getIdeaShowOwned(_ref9, req) {
+      _objectDestructuringEmpty(_ref9);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/ideaownedshow/".concat(req)).then(function (resp) {
         return resp;
       });
     },
-    deleteIdea: function deleteIdea(_ref9, req) {
-      _objectDestructuringEmpty(_ref9);
+    deleteIdea: function deleteIdea(_ref10, req) {
+      _objectDestructuringEmpty(_ref10);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("/ideadelete/".concat(req)).then(function (resp) {
         return resp;
       });
     },
-    updateIdea: function updateIdea(_ref10, _ref11) {
-      _objectDestructuringEmpty(_ref10);
-      var _ref12 = _slicedToArray(_ref11, 2),
-        slug = _ref12[0],
-        req = _ref12[1];
+    updateIdea: function updateIdea(_ref11, _ref12) {
+      _objectDestructuringEmpty(_ref11);
+      var _ref13 = _slicedToArray(_ref12, 2),
+        slug = _ref13[0],
+        req = _ref13[1];
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaupdate/".concat(slug), req).then(function (resp) {
         return resp;
       });

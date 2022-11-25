@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/ideadelete/{slug}', [IdeaController::class, 'destroy']);
     Route::patch('/ideaupdate/{slug}', [IdeaController::class, 'update']);
     Route::get('/tagindex', [TagController::class, 'index']);
+    Route::get('/roleindex', [RoleController::class, 'index']);
 });
 
 

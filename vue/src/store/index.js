@@ -88,7 +88,16 @@ const store = createStore({
                     return resp;
                 });
         },
-        postIdeaStore({ commit }, req) {
+        getMatchingRoles({}, roleSrc) {
+            return axiosClient
+                .get("/roleindex", {
+                    params: { roleSearched: roleSrc.roleSearched },
+                })
+                .then((resp) => {
+                    return resp;
+                });
+        },
+        postIdeaStore({}, req) {
             return axiosClient.post("/ideastore", req).then((resp) => {
                 return resp;
             });

@@ -124,6 +124,12 @@ const store = createStore({
                     return resp;
                 });
         },
+
+        test() {
+            return axiosClient.get(`/test`).then((resp) => {
+                return resp;
+            });
+        },
     },
     mutations: {
         logout: (state) => {

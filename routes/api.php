@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\IdeaRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,3 +40,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/ideaindex', [IdeaController::class, 'index']);
 Route::get('/ideashow/{slug}', [IdeaController::class, 'show']);
+
+
+
+Route::get('/test', [IdeaRoleController::class, 'index']);

@@ -2820,9 +2820,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getIdeaShow();
-    // this.test();
+    this.test();
   },
-
   methods: {
     getIdeaShow: function getIdeaShow() {
       var _this = this;
@@ -2837,16 +2836,12 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (er) {
         _this.noFoundFlag = true;
       });
-    } // test() {
-    //     store.dispatch("test").then((resp) => {
-    //         if (resp) {
-    //             console.log("in show test", resp.data);
-    //         }
-    //     });
-    // store.dispatch("testu").then((resp) => {
-    //     console.log("in show testu", resp);
-    // });
-    // },
+    },
+    test: function test() {
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("test").then(function (resp) {
+        console.log("in show test", resp.data);
+      });
+    }
   }
 });
 
@@ -46703,6 +46698,11 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
         slug = _ref13[0],
         req = _ref13[1];
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaupdate/".concat(slug), req).then(function (resp) {
+        return resp;
+      });
+    },
+    test: function test() {
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/test").then(function (resp) {
         return resp;
       });
     }

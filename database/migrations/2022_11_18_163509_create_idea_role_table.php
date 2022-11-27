@@ -14,6 +14,7 @@ class CreateIdeaRoleTable extends Migration
     public function up()
     {
         Schema::create('idea_role', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('idea_id');
             $table->foreign('idea_id')
                 ->references('id')
@@ -26,7 +27,7 @@ class CreateIdeaRoleTable extends Migration
 
             $table->boolean('assigned')->default(0);
 
-            $table->primary(['idea_id', 'role_id']);
+            // $table->primary(['idea_id', 'role_id']);
         });
     }
 

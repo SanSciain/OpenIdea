@@ -59,7 +59,7 @@ export default {
     },
     created() {
         this.getIdeaShow();
-        // this.test();
+        this.test();
     },
     methods: {
         getIdeaShow() {
@@ -78,16 +78,11 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
-        // test() {
-        //     store.dispatch("test").then((resp) => {
-        //         if (resp) {
-        //             console.log("in show test", resp.data);
-        //         }
-        //     });
-        // store.dispatch("testu").then((resp) => {
-        //     console.log("in show testu", resp);
-        // });
-        // },
+        test() {
+            store.dispatch("test").then((resp) => {
+                console.log("in show test", resp.data);
+            });
+        },
     },
 };
 </script>

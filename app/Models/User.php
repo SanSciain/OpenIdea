@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Idea');
     }
+
+    public function idea_role()
+    {
+        return $this->belongsToMany(IdeaRole::class)->using(IdeaRoleUser::class);
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIdeaRoleTable extends Migration
+class CreateIdeaRoleUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,24 @@ class CreateIdeaRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('idea_role', function (Blueprint $table) {
+        Schema::create('idea_role_user', function (Blueprint $table) {
             $table->unsignedBigInteger('idea_id');
             $table->foreign('idea_id')
-                ->references('id')
-                ->on('ideas');
-
+                ->references('idea_id')
+                ->on('idea_role');
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')
+                ->references('role_id')
+                ->on('idea_role');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('roles');
+                ->on('users');
 
-            $table->boolean('assigned')->default(0);
+            // $table->boolean("chosen");
 
-            $table->primary(['idea_id', 'role_id']);
+            $table->primary(['idea_id', 'role_id', 'user_id']);
         });
     }
 
@@ -37,6 +41,6 @@ class CreateIdeaRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('idea_role');
+        Schema::dropIfExists('idea_role_user');
     }
 }

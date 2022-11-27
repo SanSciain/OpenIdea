@@ -16,12 +16,18 @@
                         >
                     </div>
                     <div class="d-flex my-3" v-if="roles.length">
-                        <span
+                        <div
                             v-for="role in roles"
-                            class="badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body"
+                            class="rounded-pill bg-warning px-3 py-2 text-body d-flex align-items-center"
                             :class="roles[0] === role ? '' : 'ms-2'"
-                            >{{ role.name }}</span
                         >
+                            <span>
+                                {{ role.name }}
+                            </span>
+                            <div class="ms-apply" title="click to apply">
+                                <span>+</span>
+                            </div>
+                        </div>
                     </div>
                     <p class="card-text">
                         {{ idea.text }}
@@ -53,6 +59,7 @@ export default {
     },
     created() {
         this.getIdeaShow();
+        this.test();
     },
     methods: {
         getIdeaShow() {
@@ -71,8 +78,31 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
+        test() {
+            store.dispatch("test").then((resp) => {
+                if (resp) {
+                    console.log("in show test", resp.data);
+                }
+            });
+            // store.dispatch("testu").then((resp) => {
+            //     console.log("in show testu", resp);
+            // });
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ms-apply {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 50%;
+    margin-left: 10px;
+    cursor: pointer;
+}
+</style>

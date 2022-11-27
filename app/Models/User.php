@@ -46,4 +46,13 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Idea');
     }
+
+    public function roles()
+    {
+        // failed try
+        // return $this->belongsToMany(Idea_Role::class)->using(Idea_Role_User::class);
+
+        // one to many
+        return $this->belongsTo(Idea_Role::class);
+    }
 }

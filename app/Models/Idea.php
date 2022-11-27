@@ -21,6 +21,8 @@ class Idea extends Model
 
     public function roles()
     {
+        // return $this->belongsToMany('App\Models\Role')
+        //     ->using('App\Models\Idea_Role');
         return $this->belongsToMany('App\Models\Role');
     }
 

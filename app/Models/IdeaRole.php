@@ -12,12 +12,6 @@ class IdeaRole extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'idea_role_user', 'idea_role_id', 'user_id');
+        return $this->belongsToMany(User::class, 'idea_role_user', 'idea_role_id', 'user_id')->withPivot('chosen');
     }
-
-
-    // protected $fillable = [
-    //     'idea_id',
-    //     'role_id',
-    // ];
 }

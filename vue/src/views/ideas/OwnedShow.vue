@@ -19,12 +19,41 @@
                         >
                     </div>
                     <div class="d-flex my-3" v-if="roles.length">
-                        <span
-                            v-for="role in roles"
-                            class="badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body"
+                        <div
+                            v-for="(role, index) in roles"
                             :class="roles[0] === role ? '' : 'ms-2'"
-                            >{{ role.name }}</span
                         >
+                            <span
+                                class="badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body ms-badge"
+                                @click="
+                                    rolesMenuFlag[role.id] =
+                                        !rolesMenuFlag[role.id]
+                                "
+                                >{{ role.name }}:
+                                <span class="fst-italic">
+                                    {{
+                                        usersSelected[role.id]
+                                            ? usersSelected[role.id]
+                                            : "vacant"
+                                    }}</span
+                                >
+                            </span>
+                            <div v-if="rolesMenuFlag[role.id]">
+                                <select
+                                    class="form-select"
+                                    size="3"
+                                    v-model="usersSelected[role.id]"
+                                    @click="rolesMenuFlag[role.id] = false"
+                                >
+                                    <option value="">None</option>
+                                    <option
+                                        v-for="applier in applingUsers[index]"
+                                    >
+                                        {{ applier.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <p class="card-text">
                         {{ idea.text }}
@@ -89,7 +118,10 @@ export default {
             noFoundFlag: false,
             tags: [],
             roles: [],
+            applingUsers: [],
             deleteAlertFlag: false,
+            rolesMenuFlag: {},
+            usersSelected: {},
         };
     },
     created() {
@@ -107,6 +139,8 @@ export default {
                         this.idea = resp.data[0];
                         this.tags = resp.data[1];
                         this.roles = resp.data[2];
+                        this.applingUsers = resp.data[3];
+                        this.setRolesMenuFlag();
                     } else {
                         this.notOwnedFlag = true;
                     }
@@ -131,8 +165,21 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
+        setRolesMenuFlag() {
+            this.roles.forEach((role) => {
+                this.rolesMenuFlag[role.id] = false;
+            });
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form-select {
+    overflow-y: auto;
+}
+
+.ms-badge {
+    cursor: pointer;
+}
+</style>

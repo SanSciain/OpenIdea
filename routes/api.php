@@ -32,6 +32,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/ideaupdate/{slug}', [IdeaController::class, 'update']);
     Route::get('/tagindex', [TagController::class, 'index']);
     Route::get('/roleindex', [RoleController::class, 'index']);
+
+
+    // Route::post('/apply/{slug}/{role_id}', [IdeaRoleController::class, 'apply']);
+    // Route::post('/unapply/{slug}/{role_id}', [IdeaRoleController::class, 'unapply']);
+    Route::post('/applytoggle/{slug}/{role_id}', [IdeaRoleController::class, 'applytoggle']);
 });
 
 
@@ -40,7 +45,3 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/ideaindex', [IdeaController::class, 'index']);
 Route::get('/ideashow/{slug}', [IdeaController::class, 'show']);
-
-
-
-Route::get('/test', [IdeaRoleController::class, 'index']);

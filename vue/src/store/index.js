@@ -121,14 +121,31 @@ const store = createStore({
             return axiosClient
                 .patch(`/ideaupdate/${slug}`, req)
                 .then((resp) => {
+                    console.log("in sotre update", resp);
                     return resp;
                 });
         },
 
-        test() {
-            return axiosClient.get(`/test`).then((resp) => {
-                return resp;
-            });
+        // apply({}, [slug, role_id]) {
+        //     return axiosClient
+        //         .post(`/apply/${slug}/${role_id}`)
+        //         .then((resp) => {
+        //             return resp;
+        //         });
+        // },
+        // unapply({}, [slug, role_id]) {
+        //     return axiosClient
+        //         .post(`/unapply/${slug}/${role_id}`)
+        //         .then((resp) => {
+        //             return resp;
+        //         });
+        // },
+        applytoggle({}, [slug, role_id]) {
+            return axiosClient
+                .post(`/applytoggle/${slug}/${role_id}`)
+                .then((resp) => {
+                    return resp;
+                });
         },
     },
     mutations: {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
+use App\Models\IdeaRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -93,16 +94,31 @@ class IdeaController extends Controller
 
     public function showOwned($slug)
     {
-        try {
-            $idea = Idea::where('slug', '=', $slug)->firstOrFail();
-            $user = Auth::user();
-            if ($idea->user_id === $user->id) {
-                return [$idea, $idea->tags, $idea->roles];
-            } else if ($idea) {
-                return null;
-            }
-        } catch (ModelNotFoundException $e) {
-            throw $e;
+        // try {
+        //     $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+        //     $user = Auth::user();
+        //     if ($idea->user_id === $user->id) {
+        //         $idea_role_users = $idea->roles->map(function ($role) {
+        //             // return IdeaRole::where('idea_id', $this->idea->id)->where('role_id', $role->id)->first()->users;
+        //             return $this->idea;
+        //         });
+        //         return [$idea, $idea->tags, $idea->roles, $idea_role_users];
+        //     } else if ($idea) {
+        //         return null;
+        //     }
+        // } catch (ModelNotFoundException $e) {
+        //     throw $e;
+        // }
+
+        $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+        $user = Auth::user();
+        if ($idea->user_id === $user->id) {
+            $idea_role_users = $idea->roles->map(function ($role) use ($idea) {
+                return IdeaRole::where('idea_id', $idea->id)->where('role_id', $role->id)->first()->users;
+            });
+            return [$idea, $idea->tags, $idea->roles, $idea_role_users];
+        } else if ($idea) {
+            return null;
         }
     }
 
@@ -151,11 +167,12 @@ class IdeaController extends Controller
                     $idea->tags()->sync([]);
                 }
                 if (isset($data['roles'])) {
-                    $idea->roles()->sync([]);
-                    foreach ($data['roles'] as $role_id) {
-                        // check if it is already assigned 
-                        $idea->roles()->attach([$role_id => ['assigned' => false]]);
-                    }
+                    $idea->roles()->sync($data['roles']);
+                    // foreach ($data['roles'] as $role_id) {
+                    //     // check if it is already assigned 
+                    //     $idea->roles()->attach([$role_id => ['assigned' => false]]);
+                    //     // $idea->roles()->attach($role_id);
+                    // }
                 } else {
                     $idea->roles()->sync([]);
                 }

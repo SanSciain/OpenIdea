@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!noFoundFlag">
+        <div v-if="!noFoundFlag && !noIdeaOrNoRoleFlag">
             <div class="card m-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ idea.title }}</h5>
@@ -24,7 +24,11 @@
                             <span>
                                 {{ role.name }}
                             </span>
-                            <div class="ms-apply" title="click to apply">
+                            <div
+                                class="ms-apply"
+                                title="click to apply"
+                                @click="applytoggle(role.id)"
+                            >
                                 <span>+</span>
                             </div>
                         </div>
@@ -35,8 +39,13 @@
                 </div>
             </div>
         </div>
-        <div v-else>
+        <div v-else-if="noFoundFlag">
             <h3 class="text-center text-danger">Idea not found</h3>
+        </div>
+        <div v-else>
+            <h3 class="text-center text-danger">
+                Idea not found or Role not found
+            </h3>
         </div>
     </div>
 </template>
@@ -55,11 +64,12 @@ export default {
             tags: [],
             roles: [],
             noFoundFlag: false,
+            //Fix differenziare il controllo
+            noIdeaOrNoRoleFlag: false,
         };
     },
     created() {
         this.getIdeaShow();
-        this.test();
     },
     methods: {
         getIdeaShow() {
@@ -78,10 +88,41 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
-        test() {
-            store.dispatch("test").then((resp) => {
-                console.log("in show test", resp.data);
-            });
+        // apply(role_id) {
+        //     this.noIdeaOrNoRoleFlag = false;
+        //     const slug = this.$route.params.slug;
+        //     store
+        //         .dispatch("apply", [slug, role_id])
+        //         .then((resp) => {
+        //             alert(resp.data);
+        //         })
+        //         .catch((er) => {
+        //             this.noIdeaOrNoRoleFlag = true;
+        //         });
+        // },
+        // unapply(role_id) {
+        //     this.noIdeaOrNoRoleFlag = false;
+        //     const slug = this.$route.params.slug;
+        //     store
+        //         .dispatch("unapply", [slug, role_id])
+        //         .then((resp) => {
+        //             alert(resp.data);
+        //         })
+        //         .catch((er) => {
+        //             this.noIdeaOrNoRoleFlag = true;
+        //         });
+        // },
+        applytoggle(role_id) {
+            this.noIdeaOrNoRoleFlag = false;
+            const slug = this.$route.params.slug;
+            store
+                .dispatch("applytoggle", [slug, role_id])
+                .then((resp) => {
+                    alert(resp.data);
+                })
+                .catch((er) => {
+                    this.noIdeaOrNoRoleFlag = true;
+                });
         },
     },
 };

@@ -42,6 +42,8 @@ class CreateIdeaRoleUserTable extends Migration
                 ->references('id')
                 ->on('users');
 
+            $table->boolean('chosen')->default(0);
+
             $table->primary(['idea_role_id', 'user_id']);
         });
     }

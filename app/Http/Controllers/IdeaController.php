@@ -122,6 +122,12 @@ class IdeaController extends Controller
         }
     }
 
+    public function updateAssignedUserToRole(Request $request, $slug)
+    {
+        return $request->all();
+        $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+    }
+
     // /**
     //  * Show the form for editing the specified resource.
     //  *

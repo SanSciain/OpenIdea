@@ -2749,8 +2749,12 @@ __webpack_require__.r(__webpack_exports__);
       roles: [],
       applingUsers: [],
       deleteAlertFlag: false,
-      rolesMenuFlag: {},
-      usersSelected: {}
+      roleApplierSelectorFlag: false,
+      // rolesMenuFlag: {},
+      roleMenu: null,
+      indexRole: null,
+      usersSelected: {},
+      temp: null
     };
   },
   created: function created() {
@@ -2768,7 +2772,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.tags = resp.data[1];
           _this.roles = resp.data[2];
           _this.applingUsers = resp.data[3];
-          _this.setRolesMenuFlag();
+          // this.setRolesMenuFlag();
         } else {
           _this.notOwnedFlag = true;
         }
@@ -2776,6 +2780,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.noFoundFlag = true;
       });
     },
+    // updateAssignedUserToRole() {
+    //     const slug = this.$route.params.slug;
+    //     store
+    //         .dispatch("updateAssignedUserToRoleInShowOwned", [slug])
+    //         .then((resp) => {
+    //             console.log("in showOwned", resp);
+    //         });
+    // },
     deleteIdea: function deleteIdea() {
       var _this2 = this;
       var slug = this.$route.params.slug;
@@ -2790,13 +2802,11 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (er) {
         _this2.noFoundFlag = true;
       });
-    },
-    setRolesMenuFlag: function setRolesMenuFlag() {
-      var _this3 = this;
-      this.roles.forEach(function (role) {
-        _this3.rolesMenuFlag[role.id] = false;
-      });
-    }
+    } // setRolesMenuFlag() {
+    //     this.roles.forEach((role) => {
+    //         this.rolesMenuFlag[role.id] = false;
+    //     });
+    // },
   }
 });
 
@@ -4105,55 +4115,67 @@ var _hoisted_9 = {
   "class": "fst-italic"
 };
 var _hoisted_10 = {
-  key: 0
-};
-var _hoisted_11 = ["onUpdate:modelValue", "onClick"];
-var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-    value: ""
-  }, "None", -1 /* HOISTED */);
-});
-var _hoisted_13 = {
   "class": "card-text"
 };
-var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_11 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
     "class": "btn btn-info"
   }, "Edit", -1 /* HOISTED */);
 });
-var _hoisted_15 = {
+var _hoisted_12 = {
   key: 1
 };
-var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
     "class": "text-center text-danger"
   }, "You don't own this idea", -1 /* HOISTED */);
 });
-var _hoisted_17 = [_hoisted_16];
-var _hoisted_18 = {
+var _hoisted_14 = [_hoisted_13];
+var _hoisted_15 = {
   key: 2
 };
-var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
     "class": "text-center text-danger"
   }, "Idea not found", -1 /* HOISTED */);
 });
-var _hoisted_20 = [_hoisted_19];
-var _hoisted_21 = {
+var _hoisted_17 = [_hoisted_16];
+var _hoisted_18 = {
   key: 3,
   "class": "position-absolute top-50 start-50 translate-middle bg-secondary p-5 rounded-3 pe-auto opacity-100"
 };
-var _hoisted_22 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Are you sure to delete this idea?", -1 /* HOISTED */);
 });
-var _hoisted_23 = {
+var _hoisted_20 = {
   "class": "d-flex justify-content-around"
+};
+var _hoisted_21 = {
+  key: 4,
+  "class": "position-absolute top-50 start-50 translate-middle bg-secondary p-3 rounded-3 pe-auto opacity-100 d-flex"
+};
+var _hoisted_22 = {
+  "class": "d-flex my-5 mx-3"
+};
+var _hoisted_23 = {
+  "for": "applier-select"
+};
+var _hoisted_24 = {
+  "class": "text-capitalize fw-bold"
+};
+var _hoisted_25 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "null"
+  }, "None", -1 /* HOISTED */);
+});
+var _hoisted_26 = {
+  "class": "d-flex flex-column align-items-end justify-content-between"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [!$data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     key: 0,
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($data.deleteAlertFlag ? 'pe-none opacity-50' : '')
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($data.deleteAlertFlag || $data.roleApplierSelectorFlag ? 'pe-none opacity-50' : '')
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.slug), 1 /* TEXT */), $data.tags.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tags, function (tag) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["badge rounded-pill bg-success pt-1 pb-2 px-3", $data.tags[0] === tag ? '' : 'ms-2'])
@@ -4162,29 +4184,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($data.roles[0] === role ? '' : 'ms-2')
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-      "class": "badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body ms-badge",
+      "class": "badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body ms-badge text-capitalize",
       onClick: function onClick($event) {
-        return $data.rolesMenuFlag[role.id] = !$data.rolesMenuFlag[role.id];
+        return $data.roleApplierSelectorFlag = true, $data.roleMenu = role, $data.indexRole = index;
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name) + ": ", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.usersSelected[role.id] ? $data.usersSelected[role.id] : "vacant"), 1 /* TEXT */)], 8 /* PROPS */, _hoisted_8), $data.rolesMenuFlag[role.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-      "class": "form-select",
-      size: "3",
-      "onUpdate:modelValue": function onUpdateModelValue($event) {
-        return $data.usersSelected[role.id] = $event;
-      },
-      onClick: function onClick($event) {
-        return $data.rolesMenuFlag[role.id] = false;
-      }
-    }, [_hoisted_12, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.applingUsers[index], function (applier) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(applier.name), 1 /* TEXT */);
-    }), 256 /* UNKEYED_FRAGMENT */))], 8 /* PROPS */, _hoisted_11), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.usersSelected[role.id]]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
-  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name) + ": ", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.usersSelected[role.id] ? $data.usersSelected[role.id] : "vacant"), 1 /* TEXT */)], 8 /* PROPS */, _hoisted_8), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"rolesMenuFlag[role.id]\">\r\n                                <select\r\n                                    class=\"form-select\"\r\n                                    size=\"3\"\r\n                                    v-model=\"usersSelected[role.id]\"\r\n                                    @click=\"rolesMenuFlag[role.id] = false\"\r\n                                >\r\n                                    <option value=\"\">None</option>\r\n                                    <option\r\n                                        v-for=\"applier in applingUsers[index]\"\r\n                                    >\r\n                                        {{ applier.name }}\r\n                                    </option>\r\n                                </select>\r\n                            </div> ")], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.idea.text), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: {
       name: 'IdeaEdit'
     }
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_14];
+      return [_hoisted_11];
     }),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -4193,7 +4204,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $data.deleteAlertFlag = true;
     })
-  }, " Delete ")])])], 2 /* CLASS */)) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, _hoisted_17)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, _hoisted_20)), $data.deleteAlertFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Delete ")])])], 2 /* CLASS */)) : $data.notOwnedFlag && !$data.noFoundFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, _hoisted_14)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, _hoisted_17)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Delete alert "), $data.deleteAlertFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-danger",
     type: "button",
     onClick: _cache[1] || (_cache[1] = function () {
@@ -4205,7 +4216,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function ($event) {
       return $data.deleteAlertFlag = false;
     })
-  }, " No ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, " No ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Delete alert "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Role Applier Selector "), $data.roleApplierSelectorFlag ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Select user for: "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.roleMenu.name), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    name: "applier-select",
+    "class": "form-select",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.temp = $event;
+    })
+  }, [_hoisted_25, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.applingUsers[$data.indexRole], function (applier) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(applier.name), 1 /* TEXT */);
+  }), 256 /* UNKEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.temp]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn-close float-end",
+    onClick: _cache[4] || (_cache[4] = function ($event) {
+      return $data.roleApplierSelectorFlag = false, $data.temp = null;
+    })
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn-primary",
+    onClick: _cache[5] || (_cache[5] = function ($event) {
+      return $data.usersSelected[$data.roleMenu.id] = $data.temp, $data.roleApplierSelectorFlag = false, $data.temp = null;
+    })
+  }, " Select ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Role Applier Selector ")]);
 }
 
 /***/ }),
@@ -46851,17 +46882,26 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
         return resp;
       });
     },
-    deleteIdea: function deleteIdea(_ref10, req) {
+    updateAssignedUserToRoleInShowOwned: function updateAssignedUserToRoleInShowOwned(_ref10, _ref11) {
       _objectDestructuringEmpty(_ref10);
+      var _ref12 = _slicedToArray(_ref11, 2),
+        slug = _ref12[0],
+        req = _ref12[1];
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post("/ideaownedshow/".concat(slug), req).then(function (resp) {
+        return resp;
+      });
+    },
+    deleteIdea: function deleteIdea(_ref13, req) {
+      _objectDestructuringEmpty(_ref13);
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("/ideadelete/".concat(req)).then(function (resp) {
         return resp;
       });
     },
-    updateIdea: function updateIdea(_ref11, _ref12) {
-      _objectDestructuringEmpty(_ref11);
-      var _ref13 = _slicedToArray(_ref12, 2),
-        slug = _ref13[0],
-        req = _ref13[1];
+    updateIdea: function updateIdea(_ref14, _ref15) {
+      _objectDestructuringEmpty(_ref14);
+      var _ref16 = _slicedToArray(_ref15, 2),
+        slug = _ref16[0],
+        req = _ref16[1];
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaupdate/".concat(slug), req).then(function (resp) {
         console.log("in sotre update", resp);
         return resp;
@@ -46881,11 +46921,11 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
     //             return resp;
     //         });
     // },
-    applytoggle: function applytoggle(_ref14, _ref15) {
-      _objectDestructuringEmpty(_ref14);
-      var _ref16 = _slicedToArray(_ref15, 2),
-        slug = _ref16[0],
-        role_id = _ref16[1];
+    applytoggle: function applytoggle(_ref17, _ref18) {
+      _objectDestructuringEmpty(_ref17);
+      var _ref19 = _slicedToArray(_ref18, 2),
+        slug = _ref19[0],
+        role_id = _ref19[1];
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post("/applytoggle/".concat(slug, "/").concat(role_id)).then(function (resp) {
         return resp;
       });

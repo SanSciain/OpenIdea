@@ -112,6 +112,13 @@ const store = createStore({
                 return resp;
             });
         },
+        updateAssignedUserToRoleInShowOwned({}, [slug, req]) {
+            return axiosClient
+                .post(`/ideaownedshow/${slug}`, req)
+                .then((resp) => {
+                    return resp;
+                });
+        },
         deleteIdea({}, req) {
             return axiosClient.delete(`/ideadelete/${req}`).then((resp) => {
                 return resp;

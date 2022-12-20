@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ideacreate', [IdeaController::class, 'create']);
     Route::post('/ideastore', [IdeaController::class, 'store']);
     Route::get('/ideaownedshow/{slug}', [IdeaController::class, 'showOwned']);
+    Route::post('/ideaownedshow/{slug}', [IdeaController::class, 'updateAssignedUserToRole']);
     Route::delete('/ideadelete/{slug}', [IdeaController::class, 'destroy']);
     Route::patch('/ideaupdate/{slug}', [IdeaController::class, 'update']);
     Route::get('/tagindex', [TagController::class, 'index']);

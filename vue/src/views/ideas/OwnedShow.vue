@@ -2,7 +2,11 @@
     <div class="position-realtive">
         <div
             v-if="!notOwnedFlag && !noFoundFlag"
-            :class="deleteAlertFlag ? 'pe-none opacity-50' : ''"
+            :class="
+                deleteAlertFlag || roleApplierSelectorFlag
+                    ? 'pe-none opacity-50'
+                    : ''
+            "
         >
             <div class="card m-5">
                 <div class="card-body">
@@ -24,10 +28,11 @@
                             :class="roles[0] === role ? '' : 'ms-2'"
                         >
                             <span
-                                class="badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body ms-badge"
+                                class="badge rounded-pill bg-warning pt-1 pb-2 px-3 text-body ms-badge text-capitalize"
                                 @click="
-                                    rolesMenuFlag[role.id] =
-                                        !rolesMenuFlag[role.id]
+                                    (roleApplierSelectorFlag = true),
+                                        (roleMenu = role),
+                                        (indexRole = index)
                                 "
                                 >{{ role.name }}:
                                 <span class="fst-italic">
@@ -38,7 +43,7 @@
                                     }}</span
                                 >
                             </span>
-                            <div v-if="rolesMenuFlag[role.id]">
+                            <!-- <div v-if="rolesMenuFlag[role.id]">
                                 <select
                                     class="form-select"
                                     size="3"
@@ -52,7 +57,7 @@
                                         {{ applier.name }}
                                     </option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <p class="card-text">
@@ -77,6 +82,7 @@
         <div v-else>
             <h3 class="text-center text-danger">Idea not found</h3>
         </div>
+        <!-- Delete alert -->
         <div
             v-if="deleteAlertFlag"
             class="position-absolute top-50 start-50 translate-middle bg-secondary p-5 rounded-3 pe-auto opacity-100"
@@ -99,6 +105,55 @@
                 </button>
             </div>
         </div>
+        <!-- /Delete alert -->
+
+        <!-- Role Applier Selector -->
+        <div
+            v-if="roleApplierSelectorFlag"
+            class="position-absolute top-50 start-50 translate-middle bg-secondary p-3 rounded-3 pe-auto opacity-100 d-flex"
+        >
+            <div class="d-flex my-5 mx-3">
+                <label for="applier-select"
+                    >Select user for:
+                    <span class="text-capitalize fw-bold">{{
+                        roleMenu.name
+                    }}</span></label
+                >
+                <select
+                    name="applier-select"
+                    class="form-select"
+                    v-model="temp"
+                >
+                    <option value="null">None</option>
+                    <option v-for="applier in applingUsers[indexRole]">
+                        {{ applier.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div
+                class="d-flex flex-column align-items-end justify-content-between"
+            >
+                <button
+                    type="button"
+                    class="btn-close float-end"
+                    @click="(roleApplierSelectorFlag = false), (temp = null)"
+                ></button>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="
+                        (usersSelected[roleMenu.id] = temp),
+                            (roleApplierSelectorFlag = false),
+                            (temp = null)
+                    "
+                >
+                    Select
+                </button>
+            </div>
+        </div>
+        <!-- /Role Applier Selector -->
     </div>
 </template>
 
@@ -120,8 +175,12 @@ export default {
             roles: [],
             applingUsers: [],
             deleteAlertFlag: false,
-            rolesMenuFlag: {},
+            roleApplierSelectorFlag: false,
+            // rolesMenuFlag: {},
+            roleMenu: null,
+            indexRole: null,
             usersSelected: {},
+            temp: null,
         };
     },
     created() {
@@ -140,7 +199,7 @@ export default {
                         this.tags = resp.data[1];
                         this.roles = resp.data[2];
                         this.applingUsers = resp.data[3];
-                        this.setRolesMenuFlag();
+                        // this.setRolesMenuFlag();
                     } else {
                         this.notOwnedFlag = true;
                     }
@@ -149,6 +208,15 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
+
+        // updateAssignedUserToRole() {
+        //     const slug = this.$route.params.slug;
+        //     store
+        //         .dispatch("updateAssignedUserToRoleInShowOwned", [slug])
+        //         .then((resp) => {
+        //             console.log("in showOwned", resp);
+        //         });
+        // },
 
         deleteIdea() {
             const slug = this.$route.params.slug;
@@ -165,11 +233,11 @@ export default {
                     this.noFoundFlag = true;
                 });
         },
-        setRolesMenuFlag() {
-            this.roles.forEach((role) => {
-                this.rolesMenuFlag[role.id] = false;
-            });
-        },
+        // setRolesMenuFlag() {
+        //     this.roles.forEach((role) => {
+        //         this.rolesMenuFlag[role.id] = false;
+        //     });
+        // },
     },
 };
 </script>

@@ -114,7 +114,7 @@ const store = createStore({
         },
         updateAssignedUserToRoleInShowOwned({}, [slug, req]) {
             return axiosClient
-                .post(`/ideaownedshow/${slug}`, req)
+                .patch(`/ideaownedshow/${slug}`, { req })
                 .then((resp) => {
                     return resp;
                 });
@@ -128,7 +128,7 @@ const store = createStore({
             return axiosClient
                 .patch(`/ideaupdate/${slug}`, req)
                 .then((resp) => {
-                    console.log("in sotre update", resp);
+                    // console.log("in sotre update", resp);
                     return resp;
                 });
         },

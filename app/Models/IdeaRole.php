@@ -14,4 +14,10 @@ class IdeaRole extends Model
     {
         return $this->belongsToMany(User::class, 'idea_role_user', 'idea_role_id', 'user_id')->withPivot('chosen');
     }
+
+    protected $fillable = [
+        'assigned',
+    ];
+
+    public $timestamps = false;
 }

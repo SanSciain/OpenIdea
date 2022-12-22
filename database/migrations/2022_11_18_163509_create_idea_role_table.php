@@ -26,6 +26,8 @@ class CreateIdeaRoleTable extends Migration
                 ->on('roles');
 
             $table->boolean('assigned')->default(0);
+            // added so it works when updated
+            // $table->timestamps();
 
             // $table->primary(['idea_id', 'role_id']);
         });

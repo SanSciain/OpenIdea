@@ -2772,6 +2772,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.tags = resp.data[1];
           _this.roles = resp.data[2];
           _this.applingUsers = resp.data[3];
+          console.log("in showowned", resp.data[3]);
           // this.setRolesMenuFlag();
         } else {
           _this.notOwnedFlag = true;
@@ -2780,14 +2781,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.noFoundFlag = true;
       });
     },
-    // updateAssignedUserToRole() {
-    //     const slug = this.$route.params.slug;
-    //     store
-    //         .dispatch("updateAssignedUserToRoleInShowOwned", [slug])
-    //         .then((resp) => {
-    //             console.log("in showOwned", resp);
-    //         });
-    // },
+    updateAssignedUserToRole: function updateAssignedUserToRole(user) {
+      var slug = this.$route.params.slug;
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("updateAssignedUserToRoleInShowOwned", [slug, [user, this.roleMenu]]);
+      // .then((resp) => {
+      //     console.log("in showOwned", resp.data);
+      // });
+    },
     deleteIdea: function deleteIdea() {
       var _this2 = this;
       var slug = this.$route.params.slug;
@@ -4234,7 +4234,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     "class": "btn btn-primary",
     onClick: _cache[5] || (_cache[5] = function ($event) {
-      return $data.usersSelected[$data.roleMenu.id] = $data.temp, $data.roleApplierSelectorFlag = false, $data.temp = null;
+      return $data.usersSelected[$data.roleMenu.id] = $data.temp, $options.updateAssignedUserToRole($data.temp), $data.roleApplierSelectorFlag = false, $data.temp = null;
     })
   }, " Select ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /Role Applier Selector ")]);
 }
@@ -46887,7 +46887,9 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
       var _ref12 = _slicedToArray(_ref11, 2),
         slug = _ref12[0],
         req = _ref12[1];
-      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post("/ideaownedshow/".concat(slug), req).then(function (resp) {
+      return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaownedshow/".concat(slug), {
+        req: req
+      }).then(function (resp) {
         return resp;
       });
     },
@@ -46903,7 +46905,7 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.createStore)({
         slug = _ref16[0],
         req = _ref16[1];
       return _axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].patch("/ideaupdate/".concat(slug), req).then(function (resp) {
-        console.log("in sotre update", resp);
+        // console.log("in sotre update", resp);
         return resp;
       });
     },

@@ -145,6 +145,7 @@
                     class="btn btn-primary"
                     @click="
                         (usersSelected[roleMenu.id] = temp),
+                            updateAssignedUserToRole(temp),
                             (roleApplierSelectorFlag = false),
                             (temp = null)
                     "
@@ -199,6 +200,7 @@ export default {
                         this.tags = resp.data[1];
                         this.roles = resp.data[2];
                         this.applingUsers = resp.data[3];
+                        console.log("in showowned", resp.data[3]);
                         // this.setRolesMenuFlag();
                     } else {
                         this.notOwnedFlag = true;
@@ -209,14 +211,16 @@ export default {
                 });
         },
 
-        // updateAssignedUserToRole() {
-        //     const slug = this.$route.params.slug;
-        //     store
-        //         .dispatch("updateAssignedUserToRoleInShowOwned", [slug])
-        //         .then((resp) => {
-        //             console.log("in showOwned", resp);
-        //         });
-        // },
+        updateAssignedUserToRole(user) {
+            const slug = this.$route.params.slug;
+            store.dispatch("updateAssignedUserToRoleInShowOwned", [
+                slug,
+                [user, this.roleMenu],
+            ]);
+            // .then((resp) => {
+            //     console.log("in showOwned", resp.data);
+            // });
+        },
 
         deleteIdea() {
             const slug = this.$route.params.slug;

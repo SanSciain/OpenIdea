@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Idea;
 use App\Models\IdeaRole;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -124,8 +125,26 @@ class IdeaController extends Controller
 
     public function updateAssignedUserToRole(Request $request, $slug)
     {
-        return $request->all();
+        $data = $request->all();
         $idea = Idea::where('slug', '=', $slug)->firstOrFail();
+        // $user = User::where('name', '=', $data['req'][0])->firstOrFail();
+        // $role = $idea->roles->where('id', '=', $data['req'][1]['id'])->first();
+        $idea_role = IdeaRole::where('idea_id', $idea->id)->where('role_id', $data['req'][1]['id'])->first();
+
+        $ids = $idea_role->users()->allRelatedIds();
+        foreach ($ids as $id) {
+            $idea_role->users()->updateExistingPivot($id, ['chosen' => 0]);
+        }
+
+        if ($data['req'][0]) {
+            $idea_role->update(['assigned' => 1]);
+            $idea_role->save();
+            $user = $idea_role->users->where('name', $data['req'][0])->first();
+            $idea_role->users()->updateExistingPivot($user->id, ['chosen' => 1]);
+        } else {
+            $idea_role->update(['assigned' => 0]);
+            $idea_role->save();
+        }
     }
 
     // /**

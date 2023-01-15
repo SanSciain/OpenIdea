@@ -66,6 +66,7 @@ export default {
             noFoundFlag: false,
             //Fix differenziare il controllo
             noIdeaOrNoRoleFlag: false,
+            roleAssignedFlag: {},
         };
     },
     created() {
@@ -82,12 +83,21 @@ export default {
                         this.idea = resp.data[0];
                         this.tags = resp.data[1];
                         this.roles = resp.data[2];
+                        this.setAssignedFlagToFalse();
                     }
                 })
                 .catch((er) => {
                     this.noFoundFlag = true;
                 });
         },
+
+        setAssignedFlagToFalse() {
+            for (let i = 0; i < this.roles.length; i++) {
+                this.roleAssignedFlag[i] = false;
+            }
+        },
+        checkIfRoleAssigned() {},
+
         // apply(role_id) {
         //     this.noIdeaOrNoRoleFlag = false;
         //     const slug = this.$route.params.slug;

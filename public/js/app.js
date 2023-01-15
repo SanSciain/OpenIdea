@@ -2838,7 +2838,8 @@ __webpack_require__.r(__webpack_exports__);
       roles: [],
       noFoundFlag: false,
       //Fix differenziare il controllo
-      noIdeaOrNoRoleFlag: false
+      noIdeaOrNoRoleFlag: false,
+      roleAssignedFlag: {}
     };
   },
   created: function created() {
@@ -2854,11 +2855,18 @@ __webpack_require__.r(__webpack_exports__);
           _this.idea = resp.data[0];
           _this.tags = resp.data[1];
           _this.roles = resp.data[2];
+          _this.setAssignedFlagToFalse();
         }
       })["catch"](function (er) {
         _this.noFoundFlag = true;
       });
     },
+    setAssignedFlagToFalse: function setAssignedFlagToFalse() {
+      for (var i = 0; i < this.roles.length; i++) {
+        this.roleAssignedFlag[i] = false;
+      }
+    },
+    checkIfRoleAssigned: function checkIfRoleAssigned() {},
     // apply(role_id) {
     //     this.noIdeaOrNoRoleFlag = false;
     //     const slug = this.$route.params.slug;

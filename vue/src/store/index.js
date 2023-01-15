@@ -88,7 +88,16 @@ const store = createStore({
                     return resp;
                 });
         },
-        postIdeaStore({ commit }, req) {
+        getMatchingRoles({}, roleSrc) {
+            return axiosClient
+                .get("/roleindex", {
+                    params: { roleSearched: roleSrc.roleSearched },
+                })
+                .then((resp) => {
+                    return resp;
+                });
+        },
+        postIdeaStore({}, req) {
             return axiosClient.post("/ideastore", req).then((resp) => {
                 return resp;
             });
@@ -103,6 +112,13 @@ const store = createStore({
                 return resp;
             });
         },
+        updateAssignedUserToRoleInShowOwned({}, [slug, req]) {
+            return axiosClient
+                .patch(`/ideaownedshow/${slug}`, { req })
+                .then((resp) => {
+                    return resp;
+                });
+        },
         deleteIdea({}, req) {
             return axiosClient.delete(`/ideadelete/${req}`).then((resp) => {
                 return resp;
@@ -111,6 +127,29 @@ const store = createStore({
         updateIdea({}, [slug, req]) {
             return axiosClient
                 .patch(`/ideaupdate/${slug}`, req)
+                .then((resp) => {
+                    // console.log("in sotre update", resp);
+                    return resp;
+                });
+        },
+
+        // apply({}, [slug, role_id]) {
+        //     return axiosClient
+        //         .post(`/apply/${slug}/${role_id}`)
+        //         .then((resp) => {
+        //             return resp;
+        //         });
+        // },
+        // unapply({}, [slug, role_id]) {
+        //     return axiosClient
+        //         .post(`/unapply/${slug}/${role_id}`)
+        //         .then((resp) => {
+        //             return resp;
+        //         });
+        // },
+        applytoggle({}, [slug, role_id]) {
+            return axiosClient
+                .post(`/applytoggle/${slug}/${role_id}`)
                 .then((resp) => {
                     return resp;
                 });

@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\IdeaRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +28,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ideacreate', [IdeaController::class, 'create']);
     Route::post('/ideastore', [IdeaController::class, 'store']);
     Route::get('/ideaownedshow/{slug}', [IdeaController::class, 'showOwned']);
+    Route::patch('/ideaownedshow/{slug}', [IdeaController::class, 'updateAssignedUserToRole']);
     Route::delete('/ideadelete/{slug}', [IdeaController::class, 'destroy']);
     Route::patch('/ideaupdate/{slug}', [IdeaController::class, 'update']);
     Route::get('/tagindex', [TagController::class, 'index']);
+    Route::get('/roleindex', [RoleController::class, 'index']);
+
+
+    // Route::post('/apply/{slug}/{role_id}', [IdeaRoleController::class, 'apply']);
+    // Route::post('/unapply/{slug}/{role_id}', [IdeaRoleController::class, 'unapply']);
+    Route::post('/applytoggle/{slug}/{role_id}', [IdeaRoleController::class, 'applytoggle']);
 });
 
 

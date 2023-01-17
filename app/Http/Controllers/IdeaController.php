@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use PhpParser\Node\Expr\Cast\Object_;
+use stdClass;
 
 class IdeaController extends Controller
 {
@@ -87,7 +89,28 @@ class IdeaController extends Controller
     {
         try {
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
-            return [$idea, $idea->tags, $idea->roles];
+
+            $roleAssignedFlag = new stdClass(); //way to create an empty object
+            foreach ($idea->roles as $role) {
+                $key = $role->id;
+                $idea_role = IdeaRole::where('idea_id', $idea->id)->where('role_id', $role->id)->first();
+                if ($idea_role->assigned) {
+                    foreach ($idea_role->users as $user) {
+                        $flag = true;
+                        if (
+                            $idea_role->users()->where('user_id', $user->id)->first()->pivot->chosen && $flag
+                        ) {
+                            $flag = false;
+                            $roleAssignedFlag->$key = [$user->id, $user->name];
+                        }
+                    }
+                } else {
+                    $roleAssignedFlag->$key = false;
+                }
+            }
+
+
+            return [$idea, $idea->tags, $idea->roles, $roleAssignedFlag];
         } catch (ModelNotFoundException $e) {
             throw $e;
         }

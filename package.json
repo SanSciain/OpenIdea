@@ -21,8 +21,8 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
-        "bootstrap": "^5.2.2",
         "json5": "^2.2.3",
+        "uikit": "^3.15.21",
         "vue": "^3.2.45",
         "vue-router": "^4.1.6",
         "vuex": "^4.0.2",

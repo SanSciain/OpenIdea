@@ -25,11 +25,17 @@
                                 {{ role.name }}
                             </span>
                             <div
-                                class="ms-apply"
+                                v-if="!roleAssignedFlag[role.id]"
+                                class="ms-role-badge ms-pointer"
                                 title="click to apply"
                                 @click="applytoggle(role.id)"
                             >
                                 <span>+</span>
+                            </div>
+                            <!-- temporary change -->
+                            <div v-else class="ms-role-badge">
+                                {{ roleAssignedFlag[role.id][1][0]
+                                }}{{ roleAssignedFlag[role.id][1][1] }}
                             </div>
                         </div>
                     </div>
@@ -64,9 +70,9 @@ export default {
             tags: [],
             roles: [],
             noFoundFlag: false,
+            roleAssignedFlag: {},
             //Fix differenziare il controllo
             noIdeaOrNoRoleFlag: false,
-            roleAssignedFlag: {},
         };
     },
     created() {
@@ -83,20 +89,13 @@ export default {
                         this.idea = resp.data[0];
                         this.tags = resp.data[1];
                         this.roles = resp.data[2];
-                        this.setAssignedFlagToFalse();
+                        this.roleAssignedFlag = resp.data[3];
                     }
                 })
                 .catch((er) => {
                     this.noFoundFlag = true;
                 });
         },
-
-        setAssignedFlagToFalse() {
-            for (let i = 0; i < this.roles.length; i++) {
-                this.roleAssignedFlag[i] = false;
-            }
-        },
-        checkIfRoleAssigned() {},
 
         // apply(role_id) {
         //     this.noIdeaOrNoRoleFlag = false;
@@ -122,6 +121,7 @@ export default {
         //             this.noIdeaOrNoRoleFlag = true;
         //         });
         // },
+
         applytoggle(role_id) {
             this.noIdeaOrNoRoleFlag = false;
             const slug = this.$route.params.slug;
@@ -139,7 +139,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ms-apply {
+.ms-role-badge {
     width: 50px;
     height: 50px;
     display: flex;
@@ -149,6 +149,9 @@ export default {
     border: 2px solid black;
     border-radius: 50%;
     margin-left: 10px;
+}
+
+.ms-pointer {
     cursor: pointer;
 }
 </style>

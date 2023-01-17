@@ -1,8 +1,108 @@
 <template>
-    <div>
+    <div class="uk-section">
+        <div class="uk-container uk-align-center">
+            <nav class="uk-navbar-container" uk-navbar>
+                <div class="uk-navbar-left">
+                    <img src="../../public/logo.svg" />
+                    <ul id="navbar" class="uk-navbar-nav uk-visible@s">
+                        <li class="uk-active">
+                            <a id="styling-menu" href="#">Home</a>
+                        </li>
+                        <li class="uk-active">
+                            <a id="styling-menu" href="#">Dashboard</a>
+                        </li>
+                    </ul>
+                    <div class="uk-navbar-item">
+                        <form class="uk-search uk-search-small">
+                            <span uk-search-icon></span>
+                            <input
+                                class="uk-search-input"
+                                type="search"
+                                placeholder="Search"
+                                aria-label="Search"
+                            />
+                        </form>
+                    </div>
+                    <div class="uk-navbar-item">
+                        <button class="uk-button uk-button-text">Login</button>
+                        <button class="uk-button uk-button-text">Signup</button>
+                    </div>
+                    <a
+                        href="#"
+                        class="uk-navbar-toggle uk-hidden@s"
+                        uk-navbar-toggle-icon
+                        uk-toggle="target: #sidenav"
+                    ></a>
+                </div>
+
+                <button
+                    class="uk-button uk-button-default uk-margin-small-right"
+                    type="button"
+                    uk-toggle="target: #offcanvas-nav-primary"
+                >
+                    Primary Nav
+                </button>
+
+                <button
+                    class="uk-button uk-button-default"
+                    type="button"
+                    uk-toggle="target: #offcanvas-nav"
+                >
+                    Default Nav
+                </button>
+
+                <div id="offcanvas-nav-primary" uk-offcanvas="overlay: true">
+                    <div class="uk-offcanvas-bar uk-flex uk-flex-column">
+                        <ul
+                            class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical"
+                        >
+                            <li class="uk-active"><a href="#">Active</a></li>
+                            <li class="uk-parent">
+                                <a href="#">Parent</a>
+                                <ul class="uk-nav-sub">
+                                    <li><a href="#">Sub item</a></li>
+                                    <li><a href="#">Sub item</a></li>
+                                </ul>
+                            </li>
+                            <li class="uk-nav-header">Header</li>
+                            <li>
+                                <a href="#"
+                                    ><span
+                                        class="uk-margin-small-right"
+                                        uk-icon="icon: table"
+                                    ></span>
+                                    Item</a
+                                >
+                            </li>
+                            <li>
+                                <a href="#"
+                                    ><span
+                                        class="uk-margin-small-right"
+                                        uk-icon="icon: thumbnails"
+                                    ></span>
+                                    Item</a
+                                >
+                            </li>
+                            <li class="uk-nav-divider"></li>
+                            <li>
+                                <a href="#"
+                                    ><span
+                                        class="uk-margin-small-right"
+                                        uk-icon="icon: trash"
+                                    ></span>
+                                    Item</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">lol</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -115,7 +215,7 @@
                 </div>
             </div>
         </nav>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -148,5 +248,10 @@ export default {
     width: 50px;
     height: 50px;
     cursor: pointer;
+}
+
+.uk-navbar-left > img {
+    height: 100px;
+    width: 320px;
 }
 </style>

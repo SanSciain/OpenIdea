@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::post('/apply/{slug}/{role_id}', [IdeaRoleController::class, 'apply']);
     // Route::post('/unapply/{slug}/{role_id}', [IdeaRoleController::class, 'unapply']);
     Route::post('/applytoggle/{slug}/{role_id}', [IdeaRoleController::class, 'applytoggle']);
+    Route::post('/interestedtoggle/{slug}', [IdeaController::class, 'interestedtoggle']);
 });
 
 

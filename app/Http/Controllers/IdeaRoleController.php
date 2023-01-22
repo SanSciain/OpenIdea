@@ -57,19 +57,21 @@ class IdeaRoleController extends Controller
 
     public function applytoggle($slug, $role_id)
     {
-
-
         try {
             $idea_id = Idea::where('slug', $slug)->firstOrFail()->id;
             $idea_role = IdeaRole::where('idea_id', $idea_id)->where('role_id', $role_id)->firstOrFail();
             $user = Auth::user();
 
-            if ($idea_role->users->contains('id', $user->id)) {
-                $idea_role->users()->detach($user);
-                return "Unpplied successfully";
+            if (!$idea_role->assigned) {
+                if ($idea_role->users->contains('id', $user->id)) {
+                    $idea_role->users()->detach($user);
+                    return "Unpplied successfully";
+                } else {
+                    $idea_role->users()->attach($user);
+                    return "Applied successfully";
+                }
             } else {
-                $idea_role->users()->attach($user);
-                return "Applied successfully";
+                return "This role is already assigned";
             }
         } catch (ModelNotFoundException $e) {
             throw $e;

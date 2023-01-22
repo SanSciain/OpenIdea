@@ -89,7 +89,6 @@ class IdeaController extends Controller
     {
         try {
             $idea = Idea::where('slug', '=', $slug)->firstOrFail();
-
             $roleAssignedFlag = new stdClass(); //way to create an empty object
             foreach ($idea->roles as $role) {
                 $key = $role->id;
@@ -108,8 +107,6 @@ class IdeaController extends Controller
                     $roleAssignedFlag->$key = false;
                 }
             }
-
-
             return [$idea, $idea->tags, $idea->roles, $roleAssignedFlag];
         } catch (ModelNotFoundException $e) {
             throw $e;
@@ -251,6 +248,33 @@ class IdeaController extends Controller
                 return true;
             } else if ($idea) {
                 return null;
+            }
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
+    }
+
+
+    public function interestedtoggle($id)
+    {
+        try {
+            $idea = Idea::where('id', $id)->firstOrFail();
+            $user = Auth::user();
+            if ($idea->user->id !== $user->id) {
+                if ($idea->users()->where('id', $user->id)->first()) {
+                    $idea->users()->detach($user);
+
+                    $idea->interested = $idea->interested - 1;
+                    $idea->save();
+                    return 1; // you aren't no more interested in the idea
+                } else {
+                    $idea->users()->attach($user);
+                    $idea->interested = $idea->interested + 1;
+                    $idea->save();
+                    return 2; // you are interested in the idea
+                }
+            } else {
+                return 0; // you own the idea which you are trying to get interested
             }
         } catch (ModelNotFoundException $e) {
             throw $e;

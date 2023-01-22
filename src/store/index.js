@@ -154,6 +154,11 @@ const store = createStore({
                     return resp;
                 });
         },
+        interestedtoggle({}, id) {
+            return axiosClient.post(`/interestedtoggle/${id}`).then((resp) => {
+                return resp;
+            });
+        },
     },
     mutations: {
         logout: (state) => {
